@@ -18,19 +18,15 @@ public class ContainerVisualizer : MonoBehaviour {
     string xmlData;
 
     void Start() {
-        fileLocation = Application.dataPath + "//Xml";
-       // FindContainerFiles();
+        fileLocation = Application.dataPath + "//StreamingAssets//Xml";
+        FindContainerFiles();
         cubeIq = new CubeiqContainer.Cubeiq();
         products = new Dictionary<string, int>();
+    }
 
-        DirectoryInfo d = new DirectoryInfo(fileLocation);
-        FileInfo[] Files = d.GetFiles("*.xml");
-        foreach (FileInfo file in Files) {
-            containerFileNames.Add(file.Name);
-        }
-
+    public void LoadCubeModel() {
         ClearContainers();
-        LoadXML(Files[0].Name);
+        LoadXML(containerFileNames[0]);
         if (xmlData.ToString() != "") {
             cubeIq = (CubeiqContainer.Cubeiq)DeserializeObject(xmlData);
         }
@@ -43,8 +39,6 @@ public class ContainerVisualizer : MonoBehaviour {
         foreach (FileInfo file in Files) {
             containerFileNames.Add(file.Name);
         }
-
-
     }
 
     void OnGUI() {
