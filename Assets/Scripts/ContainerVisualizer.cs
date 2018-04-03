@@ -91,7 +91,18 @@ public class ContainerVisualizer : MonoBehaviour {
         }
         target.transform.position = containerBounds.center;
 
-        explode = true;
+        var pallet = Instantiate(cubeIqBlock, new Vector3(containerBounds.center.x - containerBounds.extents.x, -1, containerBounds.center.z - containerBounds.extents.z), Quaternion.identity);
+        pallet.name = "pallet";
+        //cube.AddComponent.< Rigidbody > ();
+
+        //pallet.transform.position = containerBounds.center;
+
+        //pallet.transform.Translate(containerBounds.center);
+        pallet.transform.localScale = new Vector3(containerBounds.size.x, 1f, containerBounds.size.z);
+        pallet.GetComponentInChildren<Renderer>().material = productMaterial[3];
+
+        cubeObjects.Add(pallet);
+        //explode = true;
         amount = 0f;
     }
 
