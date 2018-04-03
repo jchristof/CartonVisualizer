@@ -136,3 +136,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f26fd4771ebb1943b61c4c918a12a41, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hoverText: {fileID: 1860966305057550, guid: ebec66c47b0b6664e998ed96b99b1500, type: 2}

@@ -10,10 +10,12 @@ using UnityEngine.Networking.NetworkSystem;
 public class ContainerVisualizer : MonoBehaviour {
     private readonly List<string> containerFileNames = new List<string>();
     private readonly List<GameObject> cubeObjects = new List<GameObject>();
+
     private Bounds containerBounds;
     public Material[] productMaterial;
     public GameObject cubeIqBlock;
     public GameObject target;
+    
     Dictionary<string, int> products; 
     int initButtonPosition = 60;
     int buttonSpacing = 40;
@@ -71,6 +73,8 @@ public class ContainerVisualizer : MonoBehaviour {
         products.Clear();
         cubeObjects.Clear();
 
+        GameObject.Find("HoverText").GetComponent<TextMesh>().text = "";
+
         foreach (var product in cubeIq.Products.Product) {
             products.Add(product.Productid, index % productMaterial.Length);
             index++;
@@ -84,6 +88,7 @@ public class ContainerVisualizer : MonoBehaviour {
             Renderer renderer = cube.GetComponentInChildren<Renderer>();
             renderer.material = GetMaterialForContainer(block.Productid);
             cube.transform.localScale = new Vector3(float.Parse(block.Width), float.Parse(block.Height), float.Parse(block.Length));
+            cube.transform.GetChild(0).gameObject.name = block.Productid;
 
             cubeObjects.Add(cube);
             containerBounds.Encapsulate(renderer.bounds);
@@ -95,7 +100,7 @@ public class ContainerVisualizer : MonoBehaviour {
         pallet.name = "pallet";
         pallet.transform.localScale = new Vector3(containerBounds.size.x, 1f, containerBounds.size.z);
         pallet.GetComponentInChildren<Renderer>().material = productMaterial[3];
-
+        pallet.transform.GetChild(0).gameObject.name = "Pallet";
         cubeObjects.Add(pallet);
         explode = true;
         amount = 0f;
