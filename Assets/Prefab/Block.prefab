@@ -19,8 +19,6 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4907397351696714}
-  - component: {fileID: 114852893600460084}
-  - component: {fileID: 65270798561156172}
   m_Layer: 0
   m_Name: Block
   m_TagString: Container
@@ -39,6 +37,7 @@ GameObject:
   - component: {fileID: 33329229711991454}
   - component: {fileID: 65483200639658284}
   - component: {fileID: 23514452356135624}
+  - component: {fileID: 114779041590347468}
   m_Layer: 0
   m_Name: Block
   m_TagString: Container
@@ -114,18 +113,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1792004919650752}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!65 &65270798561156172
-BoxCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1523513452701068}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!65 &65483200639658284
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -138,12 +125,12 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &114852893600460084
+--- !u!114 &114779041590347468
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1523513452701068}
+  m_GameObject: {fileID: 1792004919650752}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1f26fd4771ebb1943b61c4c918a12a41, type: 3}

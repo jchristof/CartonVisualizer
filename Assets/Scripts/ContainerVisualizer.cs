@@ -97,7 +97,7 @@ public class ContainerVisualizer : MonoBehaviour {
         pallet.GetComponentInChildren<Renderer>().material = productMaterial[3];
 
         cubeObjects.Add(pallet);
-       // explode = true;
+        explode = true;
         amount = 0f;
     }
 
