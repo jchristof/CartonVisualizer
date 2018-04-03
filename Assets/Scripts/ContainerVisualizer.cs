@@ -102,7 +102,7 @@ public class ContainerVisualizer : MonoBehaviour {
         pallet.GetComponentInChildren<Renderer>().material = productMaterial[3];
 
         cubeObjects.Add(pallet);
-        //explode = true;
+        explode = true;
         amount = 0f;
     }
 
@@ -115,7 +115,7 @@ public class ContainerVisualizer : MonoBehaviour {
 
         foreach (var cube in cubeObjects) {
             Vector3 fromPosition = containerBounds.center;
-            Vector3 toPosition = cube.transform.position;
+            Vector3 toPosition = cube.GetComponentInChildren<Renderer>().bounds.center;
             Vector3 direction = toPosition - fromPosition;
 
             var rayNormal = direction.normalized;
