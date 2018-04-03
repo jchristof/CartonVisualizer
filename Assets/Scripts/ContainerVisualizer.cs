@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Xml;
 using System.Xml.Serialization;
 using System.IO;
+using System.Linq;
 using System.Text;
+using UnityEngine.Networking.NetworkSystem;
 
 public class ContainerVisualizer : MonoBehaviour {
     private readonly List<string> containerFileNames = new List<string>();
@@ -114,13 +116,20 @@ public class ContainerVisualizer : MonoBehaviour {
     }
 
     private Material GetMaterialForContainer(string productid) {
-        int materialIndex = 0;
-        if (products.TryGetValue(productid, out materialIndex)) {
-            return productMaterial[materialIndex];
-        } else {
-            System.Random r = new System.Random();
-            return productMaterial[r.Next(0,productMaterial.Length)];
+        var product = cubeIq.Products.Product.FirstOrDefault(x => x.Productid == productid);
+
+        if (product != null) {
+            var color = product.Color.Split('#');
+
+            var material = new Material(Shader.Find("Standard"));
+            material.CopyPropertiesFromMaterial(productMaterial[0]);
+            material.color = new Color(int.Parse(color[1])/255f, int.Parse(color[2])/255f, int.Parse(color[3])/255f, 0.5f);
+            return material;
         }
+        
+        System.Random r = new System.Random();
+        return productMaterial[r.Next(0, productMaterial.Length)];
+        
     }
 
     private void ClearContainers() {
