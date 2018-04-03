@@ -6,8 +6,9 @@ using System.IO;
 using System.Text;
 
 public class ContainerVisualizer : MonoBehaviour {
-    private readonly List<string> _containerFileNames = new List<string>();
-
+    private readonly List<string> containerFileNames = new List<string>();
+    private readonly List<GameObject> cubeObjects = new List<GameObject>();
+    private Bounds containerBounds;
     public Material[] productMaterial;
     public GameObject cubeIqBlock;
     public GameObject target;
@@ -28,7 +29,7 @@ public class ContainerVisualizer : MonoBehaviour {
 
     public void LoadCubeModel() {
         ClearContainers();
-        LoadXML(_containerFileNames[0]);
+        LoadXML(containerFileNames[0]);
         if (xmlData.ToString() != "") {
             cubeIq = (CubeiqContainer.Cubeiq)DeserializeObject(xmlData);
         }
@@ -39,13 +40,13 @@ public class ContainerVisualizer : MonoBehaviour {
         DirectoryInfo d = new DirectoryInfo(fileLocation);
         FileInfo[] Files = d.GetFiles("*.xml");
         foreach (FileInfo file in Files) {
-            _containerFileNames.Add(file.Name);
+            containerFileNames.Add(file.Name);
         }
     }
 
     void OnGUI() {
         int buttonPosition = initButtonPosition;
-        foreach (var fileName in _containerFileNames) {
+        foreach (var fileName in containerFileNames) {
             Create(fileName, new Rect(30, buttonPosition, 200, 30));
             buttonPosition += buttonSpacing;
         }
@@ -66,6 +67,7 @@ public class ContainerVisualizer : MonoBehaviour {
     private void Visualize(CubeiqContainer.Cubeiq cubeIq) {
         int index = 0;
         products.Clear();
+        cubeObjects.Clear();
 
         foreach (var product in cubeIq.Products.Product) {
             products.Add(product.Productid, index % productMaterial.Length);
@@ -73,19 +75,42 @@ public class ContainerVisualizer : MonoBehaviour {
         }
         index = 0;
 
-        Bounds bounds = new Bounds(Vector3.zero, Vector3.zero);
+        containerBounds = new Bounds(Vector3.zero, Vector3.zero);
 
         foreach (var block in cubeIq.Blocks.Block) {
             GameObject cube = Instantiate(cubeIqBlock, new Vector3(float.Parse(block.Widthcoord), float.Parse(block.Heightcoord), float.Parse(block.Depthcoord)), Quaternion.identity);
             Renderer renderer = cube.GetComponentInChildren<Renderer>();
             renderer.material = GetMaterialForContainer(block.Productid);
             cube.transform.localScale = new Vector3(float.Parse(block.Width), float.Parse(block.Height), float.Parse(block.Length));
-
-            bounds.Encapsulate(renderer.bounds);
+            cubeObjects.Add(cube);
+            containerBounds.Encapsulate(renderer.bounds);
 
             index++;
         }
-        target.transform.position = bounds.center;
+        target.transform.position = containerBounds.center;
+
+        explode = true;
+        amount = 0f;
+    }
+
+    private bool explode;
+    private float amount;
+
+    void Update() {
+        if (!explode || amount > 10f)
+            return;
+
+        foreach (var cube in cubeObjects) {
+            Vector3 fromPosition = containerBounds.center;
+            Vector3 toPosition = cube.transform.position;
+            Vector3 direction = toPosition - fromPosition;
+
+            var rayNormal = direction.normalized;
+
+            cube.transform.Translate(rayNormal * Mathf.Sin(amount/10f) * Time.deltaTime * 10f);
+        }
+
+        amount += .1f;
     }
 
     private Material GetMaterialForContainer(string productid) {
