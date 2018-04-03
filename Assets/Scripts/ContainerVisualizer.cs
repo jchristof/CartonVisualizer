@@ -84,25 +84,20 @@ public class ContainerVisualizer : MonoBehaviour {
             Renderer renderer = cube.GetComponentInChildren<Renderer>();
             renderer.material = GetMaterialForContainer(block.Productid);
             cube.transform.localScale = new Vector3(float.Parse(block.Width), float.Parse(block.Height), float.Parse(block.Length));
+
             cubeObjects.Add(cube);
             containerBounds.Encapsulate(renderer.bounds);
-
             index++;
         }
         target.transform.position = containerBounds.center;
 
         var pallet = Instantiate(cubeIqBlock, new Vector3(containerBounds.center.x - containerBounds.extents.x, -1, containerBounds.center.z - containerBounds.extents.z), Quaternion.identity);
         pallet.name = "pallet";
-        //cube.AddComponent.< Rigidbody > ();
-
-        //pallet.transform.position = containerBounds.center;
-
-        //pallet.transform.Translate(containerBounds.center);
         pallet.transform.localScale = new Vector3(containerBounds.size.x, 1f, containerBounds.size.z);
         pallet.GetComponentInChildren<Renderer>().material = productMaterial[3];
 
         cubeObjects.Add(pallet);
-        explode = true;
+       // explode = true;
         amount = 0f;
     }
 
