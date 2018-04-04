@@ -540,13 +540,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcb79135497b8cb4fa9b32059fb98008, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  productMaterial:
-  - {fileID: 2100000, guid: 23e2a4fad0c37c34c96670d1aca2db3c, type: 2}
-  - {fileID: 2100000, guid: 8a1e6522d15698b41b11acc27141b097, type: 2}
-  - {fileID: 2100000, guid: 6cf0d56cc40c88243912e0e261b754a9, type: 2}
-  - {fileID: 2100000, guid: 9900401fe76138543854f44c92b07320, type: 2}
-  - {fileID: 2100000, guid: 6cc563da661ac0543af6842f844d9a2a, type: 2}
-  - {fileID: 2100000, guid: ae47fc21284148945a91cf7f3906daf0, type: 2}
+  materialCollection:
+  - {fileID: 2100000, guid: b8ca33040526a9949987666a508e5e71, type: 2}
+  - {fileID: 2100000, guid: f478279d2465b324b9e7d64b9295a3d4, type: 2}
+  - {fileID: 2100000, guid: d2324f4ab6f70d84d9283af9a681dfb8, type: 2}
   cubePrefab: {fileID: 1523513452701068, guid: 0cea12423f022b24fbeb766343b4be75, type: 2}
   cameraTarget: {fileID: 391354572}
   buttonPrefab: {fileID: 1829422114422200, guid: ae2348fa27d5d2a468a39e7abfe1fd73,
@@ -1084,7 +1081,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0.8913225}
-  m_AnchoredPosition: {x: 0, y: 52.195282}
+  m_AnchoredPosition: {x: 0, y: 56.218597}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1570116913

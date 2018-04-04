@@ -12,17 +12,17 @@ namespace Assets.Scripts {
     /// </summary>
     public class VisualContainerCollection : IDisposable {
 
-        public VisualContainerCollection(CubeiqContainer.Cubeiq cubeIqData, GameObject cubePrefab, Material materialPrefab) {
+        public VisualContainerCollection(CubeiqContainer.Cubeiq cubeIqData, GameObject cubePrefab,  Material[] materialCollection) {
             if(cubeIqData == null)
                 throw new ArgumentNullException("cubeIqData");
             if(cubePrefab == null)
                 throw new ArgumentNullException("cubePrefab");
-            if(materialPrefab == null)
-                throw new ArgumentNullException("materialPrefab");
+            if(materialCollection == null)
+                throw new ArgumentNullException("materialCollection");
 
             this.cubeIqData = cubeIqData;
             this.cubePrefab = cubePrefab;
-            this.materialPrefab = materialPrefab;
+            this.materialCollection = materialCollection;
 
             CubeObjects = new List<GameObject>();
 
@@ -31,7 +31,7 @@ namespace Assets.Scripts {
 
         private readonly CubeiqContainer.Cubeiq cubeIqData;
         private readonly GameObject cubePrefab;
-        private readonly Material materialPrefab;
+        private readonly Material[] materialCollection;
 
         private Dictionary<string, int> products;
         public List<GameObject> CubeObjects { get; private set; }
@@ -45,7 +45,7 @@ namespace Assets.Scripts {
 
                 var product = cubeIqData.Products.Product.FirstOrDefault(x => x.Productid == block.Productid);
 
-                renderer.material = GetMaterialForContainer(product.Color.ToColor(0.5f));
+                renderer.material = GetMaterialForContainer(product == null ? Color.magenta : product.Color.ToColor(0.5f));
                 cube.transform.localScale = new Vector3(float.Parse(block.Width), float.Parse(block.Height), float.Parse(block.Length));
                 cube.transform.GetChild(0).gameObject.name = block.Productid;
 
@@ -65,7 +65,7 @@ namespace Assets.Scripts {
 
         private Material GetMaterialForContainer(Color color) {
             var material = new Material(Shader.Find("Standard"));
-            material.CopyPropertiesFromMaterial(materialPrefab);
+            material.CopyPropertiesFromMaterial(materialCollection[1]);
             material.color = color;
             return material;
         }

@@ -14,6 +14,7 @@ public class ContainerItem : MonoBehaviour {
         renderer.material = new Material(Shader.Find("VertexLit")) {color = Color.red};
 
         var text = GameObject.Find("HoverText").GetComponent<TextMesh>();
+
         text.text = name;
         text.transform.LookAt(Camera.main.transform);
         text.transform.Rotate(Vector3.up - new Vector3(0, 180, 0));

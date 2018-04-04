@@ -4,7 +4,7 @@ using Assets.Scripts;
 
 public class ContainerVisualizer : MonoBehaviour {
     // Requred Unity elements set from the interface
-    public Material[] productMaterial;
+    public Material[] materialCollection;
     public GameObject cubePrefab;
     public GameObject cameraTarget;
     public GameObject buttonPrefab;
@@ -48,7 +48,7 @@ public class ContainerVisualizer : MonoBehaviour {
         if(visualContainerCollection != null)
             visualContainerCollection.Dispose();
 
-        visualContainerCollection = new VisualContainerCollection(cubeIq, cubePrefab, productMaterial[0]);
+        visualContainerCollection = new VisualContainerCollection(cubeIq, cubePrefab, materialCollection);
         cameraTarget.transform.position = visualContainerCollection.VolumeCenter;
 
         containerCollectionAnimator = new ContainerCollectionAnimator(visualContainerCollection.CubeObjects, 10f, .1f);
