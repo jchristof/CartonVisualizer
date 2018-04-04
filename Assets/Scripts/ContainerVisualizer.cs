@@ -101,39 +101,25 @@ public class ContainerVisualizer : MonoBehaviour {
         pallet.GetComponentInChildren<Renderer>().material = productMaterial[3];
         pallet.transform.GetChild(0).gameObject.name = "Pallet";
         cubeObjects.Add(pallet);
-        explode = true;
-        amount = 0f;
+
+        containerCollectionAnimator = new ContainerCollectionAnimator(cubeObjects, 10f, .1f);
+        containerCollectionAnimator.Run();
     }
 
-    private bool explode;
-    private float amount;
+    private ContainerCollectionAnimator containerCollectionAnimator;
 
     void Update() {
-        if (!explode || amount > 10f)
-            return;
-
-        foreach (var cube in cubeObjects) {
-            Vector3 fromPosition = containerBounds.center;
-            Vector3 toPosition = cube.GetComponentInChildren<Renderer>().bounds.center;
-            Vector3 direction = toPosition - fromPosition;
-
-            var rayNormal = direction.normalized;
-
-            cube.transform.Translate(rayNormal * Mathf.Sin(amount/10f) * Time.deltaTime * 10f);
-        }
-
-        amount += .1f;
+        if(containerCollectionAnimator != null)
+            containerCollectionAnimator.Update();
     }
 
     private Material GetMaterialForContainer(string productid) {
         var product = cubeIq.Products.Product.FirstOrDefault(x => x.Productid == productid);
 
         if (product != null) {
-            var color = product.Color.Split('#');
-
             var material = new Material(Shader.Find("Standard"));
             material.CopyPropertiesFromMaterial(productMaterial[0]);
-            material.color = new Color(int.Parse(color[1])/255f, int.Parse(color[2])/255f, int.Parse(color[3])/255f, 0.5f);
+            material.color = product.Color.ToColor(0.5f);
             return material;
         }
         
