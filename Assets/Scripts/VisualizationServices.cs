@@ -26,5 +26,14 @@ namespace Assets.Scripts {
             c.a = alpha;
             return c;
         }
+
+        public static Vector3 ToVolume(string width, string height, string depth) {
+            float w = 0, h = 0, d = 0;
+
+            if (!float.TryParse(width, out w) || !float.TryParse(height, out h) || !float.TryParse(depth, out d))
+                return Vector3.one;
+
+            return new Vector3(w, h, d);
+        } 
     }
 }
