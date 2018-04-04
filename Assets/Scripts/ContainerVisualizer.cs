@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using UnityEngine.Networking.NetworkSystem;
+using UnityEngine.UI;
 
 public class ContainerVisualizer : MonoBehaviour {
     private readonly List<string> containerFileNames = new List<string>();
@@ -15,6 +16,7 @@ public class ContainerVisualizer : MonoBehaviour {
     public Material[] productMaterial;
     public GameObject cubeIqBlock;
     public GameObject target;
+    public GameObject buttonPrefab;
     
     Dictionary<string, int> products; 
     int initButtonPosition = 60;
@@ -29,6 +31,18 @@ public class ContainerVisualizer : MonoBehaviour {
         FindContainerFiles();
         cubeIq = new CubeiqContainer.Cubeiq();
         products = new Dictionary<string, int>();
+
+        foreach (var fileName in containerFileNames) {
+            var button = GameObject.Instantiate(buttonPrefab);
+            button.GetComponentInChildren<Text>().text = "Load " + fileName;
+            button.transform.SetParent(GameObject.Find("Content").transform);
+            var buttonScript = button.GetComponentInChildren<Button>() as Button;
+            buttonScript.onClick.AddListener(delegate() {
+                var f = fileName;
+                Create(f);
+            });
+
+        }      
     }
 
     public void LoadCubeModel() {
@@ -48,24 +62,24 @@ public class ContainerVisualizer : MonoBehaviour {
         }
     }
 
-    void OnGUI() {
-        int buttonPosition = initButtonPosition;
-        foreach (var fileName in containerFileNames) {
-            Create(fileName, new Rect(30, buttonPosition, 200, 30));
-            buttonPosition += buttonSpacing;
-        }
-    }
+//    void OnGUI() {
+//        int buttonPosition = initButtonPosition;
+//        foreach (var fileName in containerFileNames) {
+//            Create(fileName, new Rect(30, buttonPosition, 200, 30));
+//            buttonPosition += buttonSpacing;
+//        }
+//    }
 
-    private void Create(string fileName, Rect rect) {
-        if (GUI.Button(rect, "Load " + fileName)) {
-            GUI.Label(loadMsg, "Loading from: " + fileLocation);
+    private void Create(string fileName) {
+//        if (GUI.Button(rect, "Load " + fileName)) {
+//            GUI.Label(loadMsg, "Loading from: " + fileLocation);
             ClearContainers();
             LoadXML(fileName);
             if (xmlData.ToString() != "") {
                 cubeIq = (CubeiqContainer.Cubeiq)DeserializeObject(xmlData);
             }
             Visualize(cubeIq);
-        }
+//        }
     }
 
     private void Visualize(CubeiqContainer.Cubeiq cubeIq) {
