@@ -5,8 +5,7 @@ using System.Xml.Serialization;
 using System.IO;
 using System.Linq;
 using System.Text;
-using UnityEngine.Networking.NetworkSystem;
-using UnityEngine.UI;
+using Assets.Scripts;
 
 public class ContainerVisualizer : MonoBehaviour {
     private readonly List<string> containerFileNames = new List<string>();
@@ -33,16 +32,13 @@ public class ContainerVisualizer : MonoBehaviour {
         products = new Dictionary<string, int>();
 
         foreach (var fileName in containerFileNames) {
-            var button = GameObject.Instantiate(buttonPrefab);
-            button.GetComponentInChildren<Text>().text = "Load " + fileName;
-            button.transform.SetParent(GameObject.Find("Content").transform);
-            var buttonScript = button.GetComponentInChildren<Button>() as Button;
-            buttonScript.onClick.AddListener(delegate() {
+            UIServices.NewButton(buttonPrefab, "Load " + fileName, () => {
                 var f = fileName;
                 Create(f);
             });
+        }
 
-        }      
+        UIServices.NewButton(buttonPrefab, "Exit", Application.Quit);
     }
 
     public void LoadCubeModel() {
@@ -62,24 +58,13 @@ public class ContainerVisualizer : MonoBehaviour {
         }
     }
 
-//    void OnGUI() {
-//        int buttonPosition = initButtonPosition;
-//        foreach (var fileName in containerFileNames) {
-//            Create(fileName, new Rect(30, buttonPosition, 200, 30));
-//            buttonPosition += buttonSpacing;
-//        }
-//    }
-
     private void Create(string fileName) {
-//        if (GUI.Button(rect, "Load " + fileName)) {
-//            GUI.Label(loadMsg, "Loading from: " + fileLocation);
-            ClearContainers();
-            LoadXML(fileName);
-            if (xmlData.ToString() != "") {
-                cubeIq = (CubeiqContainer.Cubeiq)DeserializeObject(xmlData);
-            }
-            Visualize(cubeIq);
-//        }
+        ClearContainers();
+        LoadXML(fileName);
+        if (xmlData.ToString() != "") {
+            cubeIq = (CubeiqContainer.Cubeiq)DeserializeObject(xmlData);
+        }
+        Visualize(cubeIq);
     }
 
     private void Visualize(CubeiqContainer.Cubeiq cubeIq) {
