@@ -86,7 +86,7 @@ public class ContainerVisualizer : MonoBehaviour {
             GameObject cube = Instantiate(cubeIqBlock, VisualizationServices.ToVolume(block.Widthcoord, block.Heightcoord, block.Depthcoord), Quaternion.identity);
             Renderer renderer = cube.GetComponentInChildren<Renderer>();
             renderer.material = GetMaterialForContainer(block.Productid);
-            cube.transform.localScale = new Vector3(float.Parse(block.Width), float.Parse(block.Height), float.Parse(block.Length));
+            cube.transform.localScale = VisualizationServices.ToVolume(block.Width, block.Height, block.Length);
             cube.transform.GetChild(0).gameObject.name = block.Productid;
 
             cubeObjects.Add(cube);
