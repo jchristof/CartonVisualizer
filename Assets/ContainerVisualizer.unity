@@ -547,9 +547,8 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 9900401fe76138543854f44c92b07320, type: 2}
   - {fileID: 2100000, guid: 6cc563da661ac0543af6842f844d9a2a, type: 2}
   - {fileID: 2100000, guid: ae47fc21284148945a91cf7f3906daf0, type: 2}
-  cubeIqBlock: {fileID: 1523513452701068, guid: 0cea12423f022b24fbeb766343b4be75,
-    type: 2}
-  target: {fileID: 391354572}
+  cubePrefab: {fileID: 1523513452701068, guid: 0cea12423f022b24fbeb766343b4be75, type: 2}
+  cameraTarget: {fileID: 391354572}
   buttonPrefab: {fileID: 1829422114422200, guid: ae2348fa27d5d2a468a39e7abfe1fd73,
     type: 2}
 --- !u!1 &391354572

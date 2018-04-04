@@ -1,5 +1,4 @@
 ﻿
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +10,7 @@ namespace Assets.Scripts {
     /// <summary>
     /// Produce and manage all of the visual volume elements for a Cubeiq dataset
     /// </summary>
-    public class VisualContainerCollection {
+    public class VisualContainerCollection : IDisposable {
 
         public VisualContainerCollection(CubeiqContainer.Cubeiq cubeIqData, GameObject cubePrefab, Material materialPrefab) {
             if(cubeIqData == null)
@@ -23,8 +22,11 @@ namespace Assets.Scripts {
 
             this.cubeIqData = cubeIqData;
             this.cubePrefab = cubePrefab;
+            this.materialPrefab = materialPrefab;
 
-            BuildVisualVolues();
+            CubeObjects = new List<GameObject>();
+
+            BuildVisualVolumes();
         }
 
         private readonly CubeiqContainer.Cubeiq cubeIqData;
@@ -32,10 +34,11 @@ namespace Assets.Scripts {
         private readonly Material materialPrefab;
 
         private Dictionary<string, int> products;
-        private readonly List<GameObject> cubeObjects = new List<GameObject>();
-        private readonly Bounds containerBounds = new Bounds(Vector3.zero, Vector3.zero);
+        public List<GameObject> CubeObjects { get; private set; }
 
-        void BuildVisualVolues() {
+        private Bounds containerBounds = new Bounds(Vector3.zero, Vector3.zero);
+
+        void BuildVisualVolumes() {
             foreach (var block in cubeIqData.Blocks.Block) {
                 GameObject cube = Object.Instantiate(cubePrefab, VisualizationServices.ToVolume(block.Widthcoord, block.Heightcoord, block.Depthcoord), Quaternion.identity);
                 Renderer renderer = cube.GetComponentInChildren<Renderer>();
@@ -46,7 +49,7 @@ namespace Assets.Scripts {
                 cube.transform.localScale = new Vector3(float.Parse(block.Width), float.Parse(block.Height), float.Parse(block.Length));
                 cube.transform.GetChild(0).gameObject.name = block.Productid;
 
-                cubeObjects.Add(cube);
+                CubeObjects.Add(cube);
                 containerBounds.Encapsulate(renderer.bounds);
             }
 
@@ -55,7 +58,7 @@ namespace Assets.Scripts {
             pallet.transform.localScale = new Vector3(containerBounds.size.x, 1f, containerBounds.size.z);
             pallet.GetComponentInChildren<Renderer>().material = GetMaterialForContainer(Color.magenta);
             pallet.transform.GetChild(0).gameObject.name = "Pallet";
-            cubeObjects.Add(pallet);
+            CubeObjects.Add(pallet);
         }
 
         public Vector3 VolumeCenter { get { return containerBounds.center; } }
@@ -69,6 +72,24 @@ namespace Assets.Scripts {
 
         public void Update() {
 
+        }
+
+        protected virtual void Dispose(bool disposing) {
+            if (disposing) {
+                GameObject[] containers = GameObject.FindGameObjectsWithTag("Container");
+                foreach (var container in containers) {
+                    Object.Destroy(container);
+                }
+            }
+        }
+
+        public void Dispose() {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        ~VisualContainerCollection() {
+            Dispose(false);
         }
     }
     
