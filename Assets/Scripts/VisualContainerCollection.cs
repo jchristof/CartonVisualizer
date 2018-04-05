@@ -12,17 +12,27 @@ namespace Assets.Scripts {
     /// </summary>
     public class VisualContainerCollection : IDisposable {
 
-        public VisualContainerCollection(CubeiqContainer.Cubeiq cubeIqData, GameObject cubePrefab,  Material[] materialCollection) {
+        /// <summary>
+        /// Create a visual collection of block containers from a cubeiq xml load declation
+        /// </summary>
+        /// <param name="cubeIqData">load declaration</param>
+        /// <param name="cubePrefab">prefab used to create the block volumes</param>
+        /// <param name="materialCollection">materials used to visualize the volumes</param>
+        /// <param name="originOffset">offset from the origin to place the container</param>
+        public VisualContainerCollection(CubeiqContainer.Cubeiq cubeIqData, GameObject cubePrefab,  Material[] materialCollection, Vector3 originOffset) {
             if(cubeIqData == null)
                 throw new ArgumentNullException("cubeIqData");
             if(cubePrefab == null)
                 throw new ArgumentNullException("cubePrefab");
             if(materialCollection == null)
                 throw new ArgumentNullException("materialCollection");
+            if(originOffset == null)
+                throw new ArgumentNullException("originOffset");
 
             this.cubeIqData = cubeIqData;
             this.cubePrefab = cubePrefab;
             this.materialCollection = materialCollection;
+            this.originOffset = originOffset;
 
             CubeObjects = new List<GameObject>();
 
@@ -32,6 +42,7 @@ namespace Assets.Scripts {
         private readonly CubeiqContainer.Cubeiq cubeIqData;
         private readonly GameObject cubePrefab;
         private readonly Material[] materialCollection;
+        private readonly Vector3 originOffset = new Vector3(0,0,75);
 
         private Dictionary<string, int> products;
         public List<GameObject> CubeObjects { get; private set; }
@@ -40,7 +51,7 @@ namespace Assets.Scripts {
 
         void BuildVisualVolumes() {
             foreach (var block in cubeIqData.Blocks.Block) {
-                GameObject cube = Object.Instantiate(cubePrefab, VisualizationServices.ToVolume(block.Widthcoord, block.Heightcoord, block.Depthcoord), Quaternion.identity);
+                GameObject cube = Object.Instantiate(cubePrefab, VisualizationServices.ToVolume(block.Widthcoord, block.Heightcoord, block.Depthcoord) + originOffset, Quaternion.identity);
                 Renderer renderer = cube.GetComponentInChildren<Renderer>();
 
                 var product = cubeIqData.Products.Product.FirstOrDefault(x => x.Productid == block.Productid);
@@ -53,7 +64,7 @@ namespace Assets.Scripts {
                 containerBounds.Encapsulate(renderer.bounds);
             }
 
-            var pallet = Object.Instantiate(cubePrefab, new Vector3(containerBounds.center.x - containerBounds.extents.x, -1, containerBounds.center.z - containerBounds.extents.z), Quaternion.identity);
+            var pallet = Object.Instantiate(cubePrefab, new Vector3(containerBounds.center.x - containerBounds.extents.x, -1, containerBounds.center.z - containerBounds.extents.z) + originOffset, Quaternion.identity);
             pallet.name = "pallet";
             pallet.transform.localScale = new Vector3(containerBounds.size.x, 1f, containerBounds.size.z);
             pallet.GetComponentInChildren<Renderer>().material = GetMaterialForContainer(Color.magenta);

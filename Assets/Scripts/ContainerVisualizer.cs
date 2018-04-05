@@ -4,10 +4,14 @@ using Assets.Scripts;
 
 public class ContainerVisualizer : MonoBehaviour {
     // Requred Unity elements set from the interface
+    [Tooltip("Materials used to visualize block volumes")]
     public Material[] materialCollection;
     public GameObject cubePrefab;
+    [Tooltip("Mouse camera movement orbits around this object")]
     public GameObject cameraTarget;
     public GameObject buttonPrefab;
+    [Tooltip("Starting point for the container")]
+    public Vector3 originOffset;
     
     // Data and visualization elements
     private CubeiqContainer.Cubeiq cubeIq;
@@ -48,7 +52,7 @@ public class ContainerVisualizer : MonoBehaviour {
         if(visualContainerCollection != null)
             visualContainerCollection.Dispose();
 
-        visualContainerCollection = new VisualContainerCollection(cubeIq, cubePrefab, materialCollection);
+        visualContainerCollection = new VisualContainerCollection(cubeIq, cubePrefab, materialCollection, originOffset);
         cameraTarget.transform.position = visualContainerCollection.VolumeCenter;
 
         containerCollectionAnimator = new ContainerCollectionAnimator(visualContainerCollection.CubeObjects, 10f, .1f);
