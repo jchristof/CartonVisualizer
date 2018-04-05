@@ -28,7 +28,7 @@ namespace Assets.Scripts {
                 Renderer renderer = cube.GetComponentInChildren<Renderer>();
 
                 if (renderer == null) {
-                    Console.WriteLine("Cube renderer null. Can't evaluate container volume");
+                    Debug.Log("Cube renderer null. Can't evaluate container volume");
                     return;
                 }
 

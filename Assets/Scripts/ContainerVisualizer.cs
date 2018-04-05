@@ -39,7 +39,7 @@ public class ContainerVisualizer : MonoBehaviour {
     private CubeiqContainer.Cubeiq Create(string fullname) {
         using (var r = File.OpenText(fullname)) {
             string xml = r.ReadToEnd();
-            r.Close();
+           // r.Close();
 
             if (string.IsNullOrEmpty(xml))
                 return null;

@@ -12,18 +12,18 @@ namespace Assets.Scripts {
             var rgba = color.Split('#');
 
             if (rgba.Length != 4) {
-                Console.WriteLine("Incorrect color component count");
+                Debug.Log("Incorrect color component count");
                 return defaultColor ?? Color.magenta;
             }
 
             if (string.IsNullOrEmpty(rgba[0]) || string.IsNullOrEmpty(rgba[1]) || string.IsNullOrEmpty(rgba[2])) {
-                Console.WriteLine("Empty color component value");
+                Debug.Log("Empty color component value");
                 return defaultColor ?? Color.magenta;
             }
 
             int r,g,b;
             if (!int.TryParse(rgba[0], out r) || !int.TryParse(rgba[1], out g) || !int.TryParse(rgba[2], out b)) {
-                Console.WriteLine("Invalid color component value");
+                Debug.Log("Invalid color component value");
                 return defaultColor ?? Color.magenta;
             }
 
@@ -42,7 +42,7 @@ namespace Assets.Scripts {
             float w = 0, h = 0, d = 0;
 
             if (!float.TryParse(width, out w) || !float.TryParse(height, out h) || !float.TryParse(depth, out d)) {
-                Console.WriteLine("Invalid volume dimension");
+                Debug.Log("Invalid volume dimension");
                 return Vector3.one;
             }
 
