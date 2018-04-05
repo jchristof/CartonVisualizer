@@ -544,6 +544,7 @@ MonoBehaviour:
   - {fileID: 2100000, guid: b8ca33040526a9949987666a508e5e71, type: 2}
   - {fileID: 2100000, guid: f478279d2465b324b9e7d64b9295a3d4, type: 2}
   - {fileID: 2100000, guid: d2324f4ab6f70d84d9283af9a681dfb8, type: 2}
+  - {fileID: 2100000, guid: c90beb00f1bc4cc4f8f3e550cfb7181a, type: 2}
   cubePrefab: {fileID: 1523513452701068, guid: 0cea12423f022b24fbeb766343b4be75, type: 2}
   cameraTarget: {fileID: 391354572}
   buttonPrefab: {fileID: 1829422114422200, guid: ae2348fa27d5d2a468a39e7abfe1fd73,
@@ -1009,7 +1010,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1930982592}
   m_HandleRect: {fileID: 1930982591}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:

@@ -1,28 +1,42 @@
 ﻿
+using System;
+using Assets.Scripts;
 using UnityEngine;
 
 public class ContainerItem : MonoBehaviour {
 
     private Material originalMateral;
+    private Material[] materialCollection;
+    private TextMesh hoverTextMesh;
+    private Renderer renderer;
 
-    void Start() {
-        originalMateral = GetComponentInChildren<Renderer>().material;
+    void Awake() {
+        hoverTextMesh = GameObject.Find("HoverText").GetComponent<TextMesh>();
+        if(hoverTextMesh == null)
+            throw new InvalidOperationException("Hover text requires a TextMesh in the scene graph.");
+
+        renderer = GetComponent<Renderer>();
+    }
+
+    public void SetMaterials(Material[] materialCollection, Color color) {
+        this.materialCollection = materialCollection;
+
+        originalMateral = new Material(materialCollection[(int)ContainerMaterials.Transparent]);
+        originalMateral.color = color;
+        renderer.material = originalMateral;
     }
 
     void OnMouseOver() {
-        var renderer = GetComponentInChildren<Renderer>();
-        renderer.material = new Material(Shader.Find("VertexLit")) {color = Color.red};
+        renderer.material = materialCollection[(int) ContainerMaterials.Highlight];
 
-        var text = GameObject.Find("HoverText").GetComponent<TextMesh>();
-
-        text.text = name;
-        text.transform.LookAt(Camera.main.transform);
-        text.transform.Rotate(Vector3.up - new Vector3(0, 180, 0));
-        text.transform.position = renderer.bounds.center;
+        hoverTextMesh.text = name;
+        hoverTextMesh.transform.LookAt(Camera.main.transform);
+        hoverTextMesh.transform.Rotate(Vector3.up - new Vector3(0, 180, 0));
+        hoverTextMesh.transform.position = renderer.bounds.center;
     }
 
     void OnMouseExit() {
-        GetComponentInChildren<Renderer>().material = originalMateral;
-        //hoverText.SetActive(false);
+        renderer.material = originalMateral;
+        hoverTextMesh.text = "";
     }
 }
