@@ -75,8 +75,7 @@ namespace Assets.Scripts {
         public Vector3 VolumeCenter { get { return containerBounds.center; } }
 
         private Material GetMaterialForContainer(Color color) {
-            var material = new Material(Shader.Find("Standard"));
-            material.CopyPropertiesFromMaterial(materialCollection[1]);
+            var material = new Material(materialCollection[1]);
             material.color = color;
             return material;
         }
