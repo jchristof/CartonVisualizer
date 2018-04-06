@@ -21,8 +21,20 @@ public class ContainerVisualizer : MonoBehaviour {
     void Start() {
         FileInfo[] files = new DirectoryInfo(Application.dataPath + "//StreamingAssets//Xml").GetFiles("*.xml");
 
+//        foreach (var file in files) {
+//            UIServices.NewButton(buttonPrefab, "Load " + file.Name, () => {
+//                var f = file;
+//                cubeIq = Create(f.FullName);
+//
+//                if (cubeIq == null)
+//                    return;
+//
+//                Visualize(cubeIq);
+//            });
+//        }
+
         foreach (var file in files) {
-            UIServices.NewButton(buttonPrefab, "Load " + file.Name, () => {
+            //UIServices.NewButton(buttonPrefab, "Load " + file.Name, () => {
                 var f = file;
                 cubeIq = Create(f.FullName);
 
@@ -30,7 +42,8 @@ public class ContainerVisualizer : MonoBehaviour {
                     return;
 
                 Visualize(cubeIq);
-            });
+            return;
+            //});
         }
 
         UIServices.NewButton(buttonPrefab, "Exit", Application.Quit);
