@@ -6,8 +6,5 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/ContainerVisualizerHolo.unity
-    guid: 74d61f56f002b8e4f8073c6328429175
-  - enabled: 1
-    path: Assets/ContainerVisualizer.unity
-    guid: 58f30b49df4114346a75892cea8b10f7
+    path: Assets/Holo.unity
+    guid: 2d9df6a08dec8404d810f9009f18a30c
