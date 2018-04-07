@@ -17,9 +17,10 @@ public class ContainerVisualizer : MonoBehaviour {
     private CubeiqContainer.Cubeiq cubeIq;
     private VisualContainerCollection visualContainerCollection;
     private ContainerCollectionAnimator containerCollectionAnimator;
+    private FileInfo[] files;
 
     void Start() {
-        FileInfo[] files = new DirectoryInfo(Application.dataPath + "//StreamingAssets//Xml").GetFiles("*.xml");
+        files = new DirectoryInfo(Application.dataPath + "//StreamingAssets//Xml").GetFiles("*.xml");
 
         foreach (var file in files) {
             UIServices.NewButton(buttonPrefab, "Load " + file.Name, () => {
@@ -32,27 +33,37 @@ public class ContainerVisualizer : MonoBehaviour {
                 Visualize(cubeIq);
             });
         }
-//
-//        foreach (var file in files) {
-//            //UIServices.NewButton(buttonPrefab, "Load " + file.Name, () => {
-//                var f = file;
-//                cubeIq = Create(f.FullName);
-//
-//                if (cubeIq == null)
-//                    return;
-//
-//                Visualize(cubeIq);
-//            return;
-//            //});
-//        }
 
+        UIServices.NewButton(buttonPrefab, "Explode", Explode);
         UIServices.NewButton(buttonPrefab, "Exit", Application.Quit);
+    }
+
+    public void LoadOne() {
+        cubeIq = Create(files[0].FullName);
+
+        if (cubeIq == null)
+            return;
+
+        Visualize(cubeIq);
+    }
+
+    public void LoadTwo() {
+        cubeIq = Create(files[1].FullName);
+
+        if (cubeIq == null)
+            return;
+
+        Visualize(cubeIq);
+    }
+
+    public void Explode() {
+        if(containerCollectionAnimator != null)
+            containerCollectionAnimator.Run();
     }
 
     private CubeiqContainer.Cubeiq Create(string fullname) {
         using (var r = File.OpenText(fullname)) {
             string xml = r.ReadToEnd();
-           // r.Close();
 
             if (string.IsNullOrEmpty(xml))
                 return null;
@@ -69,7 +80,6 @@ public class ContainerVisualizer : MonoBehaviour {
         cameraTarget.transform.position = visualContainerCollection.VolumeCenter;
 
         containerCollectionAnimator = new ContainerCollectionAnimator(visualContainerCollection.CubeObjects, .5f, .1f);
-        containerCollectionAnimator.Run();
     }
 
     void Update() {
