@@ -21,6 +21,7 @@ public class MouseOrbit : MonoBehaviour {
     float y = 0.0f;
 
     void Start() {
+        target.localScale = target.localScale  * 0.0254f;
         Vector3 angles = transform.eulerAngles;
         x = angles.y;
         y = angles.x;

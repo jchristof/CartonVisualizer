@@ -42,7 +42,7 @@ namespace Assets.Scripts {
         private readonly CubeiqContainer.Cubeiq cubeIqData;
         private readonly GameObject cubePrefab;
         private readonly Material[] materialCollection;
-        private readonly Vector3 originOffset = new Vector3(0,0,75);
+        private readonly Vector3 originOffset;
 
         private Dictionary<string, int> products;
         public List<GameObject> CubeObjects { get; private set; }
@@ -51,23 +51,25 @@ namespace Assets.Scripts {
 
         void BuildVisualVolumes() {
             foreach (var block in cubeIqData.Blocks.Block) {
-                GameObject cube = Object.Instantiate(cubePrefab, VisualizationServices.ToVolume(block.Widthcoord, block.Heightcoord, block.Depthcoord) + originOffset, Quaternion.identity);
+                GameObject cube = Object.Instantiate(cubePrefab, (VisualizationServices.ToVolume(block.Widthcoord, block.Heightcoord, block.Depthcoord) + originOffset) * 0.0254f, Quaternion.identity);
+                cube.transform.localScale = new Vector3(float.Parse(block.Width), float.Parse(block.Height), float.Parse(block.Length)) * 0.0254f;
+
                 containerBounds.Encapsulate(cube.GetComponentInChildren<Renderer>().bounds);
 
                 var product = cubeIqData.Products.Product.FirstOrDefault(x => x.Productid == block.Productid);
-
                 var productColor = product == null ? Color.magenta : product.Color.ToColor(0.5f);
-                cube.GetComponentInChildren<ContainerItem>().SetMaterials(materialCollection, productColor);
 
-                cube.transform.localScale = new Vector3(float.Parse(block.Width), float.Parse(block.Height), float.Parse(block.Length));
+                cube.GetComponentInChildren<ContainerItem>().SetMaterials(materialCollection, productColor);              
                 cube.transform.GetChild(0).gameObject.name = block.Productid;
 
                 CubeObjects.Add(cube);
             }
 
-            var pallet = Object.Instantiate(cubePrefab, new Vector3(containerBounds.center.x - containerBounds.extents.x, -1, containerBounds.center.z - containerBounds.extents.z) + originOffset, Quaternion.identity);
+            var palletHeight = 1f * 0.0254f;
 
-            pallet.transform.localScale = new Vector3(containerBounds.size.x, 1f, containerBounds.size.z);
+            var pallet = Object.Instantiate(cubePrefab, new Vector3(containerBounds.center.x - containerBounds.extents.x, -palletHeight, containerBounds.center.z - containerBounds.extents.z) + originOffset, Quaternion.identity);
+         
+            pallet.transform.localScale = new Vector3(containerBounds.size.x, palletHeight, containerBounds.size.z) ;
             pallet.GetComponentInChildren<ContainerItem>().SetMaterials(materialCollection, Color.magenta);
             pallet.transform.GetChild(0).gameObject.name = "Pallet";
             CubeObjects.Add(pallet);

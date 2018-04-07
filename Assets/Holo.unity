@@ -575,7 +575,7 @@ MonoBehaviour:
   cameraTarget: {fileID: 391354572}
   buttonPrefab: {fileID: 1829422114422200, guid: 5a40843364760c8409fb4f338f23838d,
     type: 2}
-  originOffset: {x: 0, y: 0, z: 50}
+  originOffset: {x: 0, y: -0.5, z: 2}
 --- !u!1 &391354572
 GameObject:
   m_ObjectHideFlags: 0
@@ -1579,6 +1579,23 @@ Prefab:
     - target: {fileID: 1860966305057550, guid: c2af7fa006894f74eb8fcb3810e7e022, type: 2}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 102564115823945198, guid: c2af7fa006894f74eb8fcb3810e7e022,
+        type: 2}
+      propertyPath: m_Anchor
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4768802198074110, guid: c2af7fa006894f74eb8fcb3810e7e022, type: 2}
+      propertyPath: m_LocalScale.x
+      value: 0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 4768802198074110, guid: c2af7fa006894f74eb8fcb3810e7e022, type: 2}
+      propertyPath: m_LocalScale.y
+      value: 0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 4768802198074110, guid: c2af7fa006894f74eb8fcb3810e7e022, type: 2}
+      propertyPath: m_LocalScale.z
+      value: 0.05
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c2af7fa006894f74eb8fcb3810e7e022, type: 2}
