@@ -79,7 +79,7 @@ public class ContainerVisualizer : MonoBehaviour {
         visualContainerCollection = new VisualContainerCollection(cubeIq, cubePrefab, materialCollection, originOffset);
         cameraTarget.transform.position = visualContainerCollection.VolumeCenter;
 
-        containerCollectionAnimator = new ContainerCollectionAnimator(visualContainerCollection.CubeObjects, .5f, .1f);
+        containerCollectionAnimator = new ContainerCollectionAnimator(visualContainerCollection.CubeObjects, 1f, .1f);
     }
 
     void Update() {
