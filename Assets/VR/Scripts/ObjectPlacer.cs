@@ -104,32 +104,32 @@ public class ObjectPlacer : MonoBehaviour
 
     private void ProcessPlacementResults()
     {
-        if (_results.Count > 0)
+        if (_results.Count <= 0)
+            return;
+
+        var toPlace = _results.Dequeue();
+        // Output
+        if (DrawDebugBoxes)
         {
-            var toPlace = _results.Dequeue();
-            // Output
-            if (DrawDebugBoxes)
-            {
-                DrawBox(toPlace, Color.red);
-            }
+            DrawBox(toPlace, Color.red);
+        }
 
-            var rotation = Quaternion.LookRotation(toPlace.Normal, Vector3.up);
+        var rotation = Quaternion.LookRotation(toPlace.Normal, Vector3.up);
 
-            switch (toPlace.ObjType)
-            {
-                case ObjectType.SquareBuilding:
-                    ObjectCollectionManager.Instance.CreateSquareBuilding(_placedSquareBuilding++, toPlace.Position, rotation);
-                    break;
-                case ObjectType.TallBuilding:
-                    ObjectCollectionManager.Instance.CreateTallBuilding(_placedTallBuilding++, toPlace.Position, rotation);
-                    break;
-                case ObjectType.WideBuilding:
-                    ObjectCollectionManager.Instance.CreateWideBuilding(_placedWideBuilding++, toPlace.Position, rotation);
-                    break;
-                case ObjectType.Tree:
-                    ObjectCollectionManager.Instance.CreateTree(_placedTree++, toPlace.Position, rotation);
-                    break;
-            }
+        switch (toPlace.ObjType)
+        {
+            case ObjectType.SquareBuilding:
+                ObjectCollectionManager.Instance.CreateSquareBuilding(_placedSquareBuilding++, toPlace.Position, rotation);
+                break;
+            case ObjectType.TallBuilding:
+                ObjectCollectionManager.Instance.CreateTallBuilding(_placedTallBuilding++, toPlace.Position, rotation);
+                break;
+            case ObjectType.WideBuilding:
+                ObjectCollectionManager.Instance.CreateWideBuilding(_placedWideBuilding++, toPlace.Position, rotation);
+                break;
+            case ObjectType.Tree:
+                ObjectCollectionManager.Instance.CreateTree(_placedTree++, toPlace.Position, rotation);
+                break;
         }
     }
 
