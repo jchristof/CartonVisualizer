@@ -7,7 +7,7 @@ Material:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: Wireframe-Transparent
-  m_Shader: {fileID: 4800000, guid: 90cadb91a7902754f9fe5b4563306677, type: 3}
+  m_Shader: {fileID: 4800000, guid: f55de1dc635ac1a4497913ae198cfc4b, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
