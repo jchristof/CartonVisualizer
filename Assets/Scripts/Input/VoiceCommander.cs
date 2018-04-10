@@ -10,11 +10,11 @@ namespace Assets.Scripts.Input {
 
         public void Start() {
             keywords.Add("show room", () =>{
-                GameObject.Find("SpatialUnderstanding").GetComponentInChildren<SpatialUnderstanding>().UnderstandingCustomMesh.DrawProcessedMesh = true;
+                GameObject.Find("SpatialMapper").GetComponentInChildren<SpatialUnderstanding>().UnderstandingCustomMesh.DrawProcessedMesh = true;
             });
 
             keywords.Add("hide rooom", () => {
-                GameObject.Find("SpatialUnderstanding").GetComponentInChildren<SpatialUnderstanding>().UnderstandingCustomMesh.DrawProcessedMesh = false;
+                GameObject.Find("SpatialMapper").GetComponentInChildren<SpatialUnderstanding>().UnderstandingCustomMesh.DrawProcessedMesh = false;
             });
 
             keywords.Add("load one", () => {

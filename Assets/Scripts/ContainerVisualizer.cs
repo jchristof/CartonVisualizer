@@ -21,9 +21,13 @@ public class ContainerVisualizer : MonoBehaviour {
 
     void Start() {
         files = new DirectoryInfo(Application.dataPath + "//StreamingAssets//Xml").GetFiles("*.xml");
+        var menu = GameObject.Find("Content");
+
+        if (menu == null)
+            return;
 
         foreach (var file in files) {
-            UIServices.NewButton(buttonPrefab, "Load " + file.Name, () => {
+            UIServices.NewButton(buttonPrefab, menu, "Load " + file.Name, () => {
                 var f = file;
                 cubeIq = Create(f.FullName);
 
@@ -34,8 +38,8 @@ public class ContainerVisualizer : MonoBehaviour {
             });
         }
 
-        UIServices.NewButton(buttonPrefab, "Explode", Explode);
-        UIServices.NewButton(buttonPrefab, "Exit", Application.Quit);
+        UIServices.NewButton(buttonPrefab, menu, "Explode", Explode);
+        UIServices.NewButton(buttonPrefab, menu, "Exit", Application.Quit);
     }
 
     public void LoadOne() {
