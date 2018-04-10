@@ -95,7 +95,13 @@ namespace HoloToolkit.Unity
             // Check to see if any part of the Tagalong's BoxCollider's bounds is
             // inside the camera's view frustum. Note, the bounds used are an Axis
             // Aligned Bounding Box (AABB).
+#if UNITY_WSA
+            bool needsToMove = false;
+            MathUtils.TestPlanesAABB(frustumPlanes, 1 | 2 | 4 | 8 | 16 | 32, tagalongCollider.bounds, out needsToMove);
+            needsToMove = !needsToMove;
+#else
             bool needsToMove = !GeometryUtility.TestPlanesAABB(frustumPlanes, tagalongCollider.bounds);
+#endif
             Transform cameraTransform = CameraCache.Main.transform;
 
             // If we already know we don't need to move, bail out early.
