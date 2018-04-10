@@ -34,8 +34,6 @@ public class SpatialUnderstandingState : Singleton<SpatialUnderstandingState>, I
         }
     }
 
-
-
     public bool DoesScanMeetMinBarForCompletion {
         get {
             // Only allow this when we are actually scanning

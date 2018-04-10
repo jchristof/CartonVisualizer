@@ -1,6 +1,7 @@
 ﻿
 using System.Collections.Generic;
 using System.Linq;
+using HoloToolkit.Unity;
 using UnityEngine;
 using UnityEngine.Windows.Speech;
 
@@ -8,13 +9,12 @@ namespace Assets.Scripts.Input {
     public class VoiceCommander : MonoBehaviour {
 
         public void Start() {
-            keywords.Add("show room", () =>
-            {
-                GameObject.Find("SpatialUnderstanding").SetActive(true);
+            keywords.Add("show room", () =>{
+                GameObject.Find("SpatialUnderstanding").GetComponentInChildren<SpatialUnderstanding>().UnderstandingCustomMesh.DrawProcessedMesh = true;
             });
 
             keywords.Add("hide rooom", () => {
-                GameObject.Find("SpatialUnderstanding").SetActive(false);
+                GameObject.Find("SpatialUnderstanding").GetComponentInChildren<SpatialUnderstanding>().UnderstandingCustomMesh.DrawProcessedMesh = false;
             });
 
             keywords.Add("load one", () => {
