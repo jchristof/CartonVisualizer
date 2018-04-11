@@ -1,23 +1,59 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using HoloToolkit.Unity;
 using UnityEngine;
 
 public class SpatialMapObjectPlacer : MonoBehaviour {
 
-    
-
     public void InitializePlacement() {
+        SpatialUnderstandingDllObjectPlacement.Solver_Init();
+
         var container = GameObject.Find("Container");
         var bounds = container.GetComponentInChildren<ContainerVisualizer>().ContainerBounds;
-        var understandingDLL = SpatialUnderstanding.Instance.UnderstandingDLL;
+        var understandingDll = SpatialUnderstanding.Instance.UnderstandingDLL;
 
-        SpatialUnderstandingDllObjectPlacement.ObjectPlacementDefinition placementDefinition = SpatialUnderstandingDllObjectPlacement.ObjectPlacementDefinition.Create_OnFloor(bounds.extents * .5f);
-        var pinnedId = understandingDLL.PinObject(placementDefinition);
+        var placementDefinition = SpatialUnderstandingDllObjectPlacement.ObjectPlacementDefinition.Create_OnFloor(bounds.extents * .5f);
+        var pinnedPlacementDefinition = understandingDll.PinObject(placementDefinition);
 
-        SpatialUnderstandingDllObjectPlacement.Solver_PlaceObject("container")
-        SpatialUnderstandingDllObjectPlacement.Solver_Init();
+        var placementRules = new List<SpatialUnderstandingDllObjectPlacement.ObjectPlacementRule>();
+        var rule = SpatialUnderstandingDllObjectPlacement.ObjectPlacementRule.Create_AwayFromWalls(.1f);
+
+        placementRules.Add(rule);
+        var pinnedPlacementRules = understandingDll.PinObject(placementRules);
+
+        var placementConstraints = new List<SpatialUnderstandingDllObjectPlacement.ObjectPlacementConstraint>();
+        var constraint = SpatialUnderstandingDllObjectPlacement.ObjectPlacementConstraint.Create_NearCenter();
+        placementConstraints.Add(constraint);
+
+        var pinnedPlacementConstraints = understandingDll.PinObject(placementConstraints);
+
+        var staticPlacementResultPtr = understandingDll.GetStaticObjectPlacementResultPtr();
+
+        var result = SpatialUnderstandingDllObjectPlacement.Solver_PlaceObject("container", pinnedPlacementDefinition,
+            placementRules.Count, pinnedPlacementRules, placementConstraints.Count, pinnedPlacementConstraints,
+            staticPlacementResultPtr);
+
+        SpatialUnderstandingDllObjectPlacement.ObjectPlacementResult placementResult = understandingDll.GetStaticObjectPlacementResult();
+        container.transform.position = (placementResult.Clone() as SpatialUnderstandingDllObjectPlacement.ObjectPlacementResult).Position ;
+    }
+
+    private ObjectPlacementQuery MakePlacementQuery() {
+        var placementQuery = new ObjectPlacementQuery();
+
+        var container = GameObject.Find("Container");
+        var bounds = container.GetComponentInChildren<ContainerVisualizer>().ContainerBounds;
+        placementQuery.PlacementDefinition = SpatialUnderstandingDllObjectPlacement.ObjectPlacementDefinition.Create_OnFloor(bounds.extents * .5f);
+
+        var placementRules = new List<SpatialUnderstandingDllObjectPlacement.ObjectPlacementRule>();
+        var rule = SpatialUnderstandingDllObjectPlacement.ObjectPlacementRule.Create_AwayFromWalls(.1f);
+
+        placementQuery.PlacementRules.Add(rule);
+
+        var placementConstraints = new List<SpatialUnderstandingDllObjectPlacement.ObjectPlacementConstraint>();
+        var constraint = SpatialUnderstandingDllObjectPlacement.ObjectPlacementConstraint.Create_NearCenter();
+
+        placementConstraints.Add(constraint);
+
+        return placementQuery;
     }
 
     private PlacementResult PlaceObject(string placementName,
@@ -31,10 +67,10 @@ public class SpatialMapObjectPlacer : MonoBehaviour {
         if (SpatialUnderstandingDllObjectPlacement.Solver_PlaceObject(
                                                                       placementName,
                                                                       SpatialUnderstanding.Instance.UnderstandingDLL.PinObject(placementDefinition),
-                                                                      (placementRules != null) ? placementRules.Count : 0,
-                                                                      ((placementRules != null) && (placementRules.Count > 0)) ? SpatialUnderstanding.Instance.UnderstandingDLL.PinObject(placementRules.ToArray()) : IntPtr.Zero,
-                                                                      (placementConstraints != null) ? placementConstraints.Count : 0,
-                                                                      ((placementConstraints != null) && (placementConstraints.Count > 0)) ? SpatialUnderstanding.Instance.UnderstandingDLL.PinObject(placementConstraints.ToArray()) : IntPtr.Zero,
+                                                                      placementRules.Count,
+                                                                      SpatialUnderstanding.Instance.UnderstandingDLL.PinObject(placementRules.ToArray()),
+                                                                       placementConstraints.Count,
+                                                                      SpatialUnderstanding.Instance.UnderstandingDLL.PinObject(placementConstraints.ToArray()),
                                                                       SpatialUnderstanding.Instance.UnderstandingDLL.GetStaticObjectPlacementResultPtr()) > 0) {
             SpatialUnderstandingDllObjectPlacement.ObjectPlacementResult placementResult = SpatialUnderstanding.Instance.UnderstandingDLL.GetStaticObjectPlacementResult();
 
