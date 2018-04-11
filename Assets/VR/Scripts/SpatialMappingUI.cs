@@ -1,21 +1,22 @@
 ﻿using System.Linq;
+using HoloToolkit.Unity.InputModule;
 using UnityEngine;
 
-public class SpatialMappingUI : MonoBehaviour {
+public class SpatialMappingUI : MonoBehaviour, IInputClickHandler, ISourceStateHandler {
 
     private TextMesh title;
     private TextMesh detail;
     private SpatialMapState spatialMapState;
 
-	// Use this for initialization
 	void Start () {
 	    var uiComponents = GetComponentsInChildren<TextMesh>();
 
         title = uiComponents.FirstOrDefault(x => x.name == "Title");
 	    detail = uiComponents.FirstOrDefault(x => x.name == "Detail");
-	}
+
+	    InputManager.Instance.PushFallbackInputHandler(gameObject);
+    }
 	
-	// Update is called once per frame
 	void Update () {
 	    if (spatialMapState == null) {
 
@@ -36,4 +37,16 @@ public class SpatialMappingUI : MonoBehaviour {
 	    detail.text = detailsString;
 	    title.text = "Scan state: " + spatialMapState.SpatialScanState;
 	}
+
+    public void OnInputClicked(InputClickedEventData eventData) {
+        spatialMapState.FinishScanning();
+    }
+
+    public void OnSourceDetected(SourceStateEventData eventData) {
+        
+    }
+
+    public void OnSourceLost(SourceStateEventData eventData) {
+        
+    }
 }

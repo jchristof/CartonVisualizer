@@ -1,7 +1,7 @@
 ﻿
-
 using System.Collections.Generic;
 using HoloToolkit.Unity;
+using UnityEngine;
 
 public class ObjectPlacementQuery {
     public ObjectPlacementQuery() {
@@ -13,11 +13,28 @@ public class ObjectPlacementQuery {
     public List<SpatialUnderstandingDllObjectPlacement.ObjectPlacementRule> PlacementRules { get; private set; }
     public List<SpatialUnderstandingDllObjectPlacement.ObjectPlacementConstraint> PlacementConstraints { get; private set;}
 
-//    public void AddRule(SpatialUnderstandingDllObjectPlacement.ObjectPlacementRule rule) {
-//        PlacementRules.Add(rule);
-//    }
-//
-//    public void AddConstraint(SpatialUnderstandingDllObjectPlacement.ObjectPlacementConstraint constraint) {
-//        PlacementConstraints.Add(constraint);
-//    }
+    public SpatialUnderstandingDllObjectPlacement.ObjectPlacementResult Query () {
+        var understandingDll = SpatialUnderstanding.Instance.UnderstandingDLL;
+
+        var pinnedPlacementDefinition = understandingDll.PinObject(PlacementDefinition);
+        var pinnedPlacementRules = understandingDll.PinObject(PlacementRules);
+        var pinnedPlacementConstraints = understandingDll.PinObject(PlacementConstraints);
+        var staticPlacementResultPtr = understandingDll.GetStaticObjectPlacementResultPtr();
+
+        var result = SpatialUnderstandingDllObjectPlacement.Solver_PlaceObject("container", pinnedPlacementDefinition,
+            PlacementRules.Count, pinnedPlacementRules, PlacementConstraints.Count, pinnedPlacementConstraints,
+            staticPlacementResultPtr);
+
+        SpatialUnderstandingDllObjectPlacement.ObjectPlacementResult placementResult = understandingDll.GetStaticObjectPlacementResult();
+
+        understandingDll.UnpinAllObjects();
+
+        if (result == 0 || placementResult == null) {
+            Debug.Log("Object placement query failed");
+            return null;
+        }
+
+        return placementResult.Clone() as SpatialUnderstandingDllObjectPlacement.ObjectPlacementResult;
+    }
 }
+

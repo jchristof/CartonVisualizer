@@ -4,7 +4,7 @@ using HoloToolkit.Unity;
 using HoloToolkit.Unity.InputModule;
 using UnityEngine;
 
-public class SpatialMapState : Singleton<SpatialMapState>, IInputClickHandler, ISourceStateHandler {
+public class SpatialMapState : Singleton<SpatialMapState> {
 
     private Action updateAction = () => { };
 
@@ -15,10 +15,14 @@ public class SpatialMapState : Singleton<SpatialMapState>, IInputClickHandler, I
     public SpatialUnderstanding.ScanStates SpatialScanState { get { return spatialUnderstanding.ScanState; } }
 
     void Start () {
-        InputManager.Instance.PushFallbackInputHandler(gameObject);
+        
         SpatialStats = new SpatialUnderstandingDll.Imports.PlayspaceStats();
         spatialUnderstanding = SpatialUnderstanding.Instance;
         lastScanState = spatialUnderstanding.ScanState;
+    }
+
+    public void FinishScanning() {
+        spatialUnderstanding.RequestFinishScan();
     }
 	
 	void Update () {
@@ -31,64 +35,30 @@ public class SpatialMapState : Singleton<SpatialMapState>, IInputClickHandler, I
 
 	    switch (spatialUnderstanding.ScanState) {
             case SpatialUnderstanding.ScanStates.None:
-                updateAction = SpatialScanStateNone;
+                updateAction = () => { };
                 break;
             case SpatialUnderstanding.ScanStates.Done:
-                updateAction = SpatialScanStateDone;
+                updateAction = () => { };
                 break;
             case SpatialUnderstanding.ScanStates.ReadyToScan:
-                updateAction = SpacialScanStateReadyToScan;
+                updateAction = () => { };
                 break;
             case SpatialUnderstanding.ScanStates.Scanning:
-                updateAction = SpatialScanStateScanning;
+                updateAction = () => {
+                    IntPtr statsPtr = spatialUnderstanding.UnderstandingDLL.GetStaticPlayspaceStatsPtr();
+                    if (SpatialUnderstandingDll.Imports.QueryPlayspaceStats(statsPtr) == 0) {
+                        Debug.Log("Load space stats query failed");
+                        return;
+                    }
+
+                    SpatialStats = spatialUnderstanding.UnderstandingDLL.GetStaticPlayspaceStats();
+                };
                 break;
             case SpatialUnderstanding.ScanStates.Finishing:
-                updateAction = SpatialScanStateFinishing;
+                updateAction = () => { };
                 break;
         }
 
 	    lastScanState = spatialUnderstanding.ScanState;
-
-
 	}
-
-    private void SpatialScanStateNone() {
-        
-    }
-
-    private void SpatialScanStateDone() {
-
-    }
-
-    private void SpatialScanStateFinishing() {
-
-    }
-
-    private void SpacialScanStateReadyToScan() {
-        
-    }
-
-    private void SpatialScanStateScanning() {
-
-        IntPtr statsPtr = spatialUnderstanding.UnderstandingDLL.GetStaticPlayspaceStatsPtr();
-        if (SpatialUnderstandingDll.Imports.QueryPlayspaceStats(statsPtr) == 0) {
-            Debug.Log("Load space stats query failed");
-            return;
-        }
-
-        SpatialStats = spatialUnderstanding.UnderstandingDLL.GetStaticPlayspaceStats();
-    }
-
-    public void OnInputClicked(InputClickedEventData eventData) {
-        
-    }
-
-    public void OnSourceDetected(SourceStateEventData eventData) {
-        
-    }
-
-    public void OnSourceLost(SourceStateEventData eventData) {
-        
-    }
-
 }
