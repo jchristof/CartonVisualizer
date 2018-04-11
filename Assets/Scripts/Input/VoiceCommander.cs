@@ -29,6 +29,9 @@ namespace Assets.Scripts.Input {
                 GameObject.Find("Container").GetComponentInChildren<ContainerVisualizer>().Explode();
             });
 
+            keywords.Add("place container", ()=>{
+                new SpatialMapObjectPlacer();
+            });
             keywordRecognizer = new KeywordRecognizer(keywords.Keys.ToArray());
 
             keywordRecognizer.OnPhraseRecognized += KeywordRecognizer_OnPhraseRecognized;

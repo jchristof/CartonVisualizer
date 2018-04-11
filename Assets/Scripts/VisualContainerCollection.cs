@@ -19,9 +19,10 @@ namespace Assets.Scripts {
         /// <param name="cubePrefab">prefab used to create the block volumes</param>
         /// <param name="materialCollection">materials used to visualize the volumes</param>
         /// <param name="originOffset">offset from the origin to place the container</param>
-        public VisualContainerCollection(CubeiqContainer.Cubeiq cubeIqData, GameObject cubePrefab,  Material[] materialCollection, Vector3 originOffset) {
+        public VisualContainerCollection(CubeiqContainer.Cubeiq cubeIqData, GameObject parent, GameObject cubePrefab,  Material[] materialCollection, Vector3 originOffset) {
             if(cubeIqData == null)
                 throw new ArgumentNullException("cubeIqData");
+
             if(cubePrefab == null)
                 throw new ArgumentNullException("cubePrefab");
             if(materialCollection == null || materialCollection.Length != Enum.GetNames(typeof(ContainerMaterials)).Length)
@@ -30,6 +31,7 @@ namespace Assets.Scripts {
                 throw new ArgumentNullException("originOffset");
 
             this.cubeIqData = cubeIqData;
+            this.parent = parent;
             this.cubePrefab = cubePrefab;
             this.materialCollection = materialCollection;
             this.originOffset = originOffset;
@@ -43,6 +45,7 @@ namespace Assets.Scripts {
         private readonly GameObject cubePrefab;
         private readonly Material[] materialCollection;
         private readonly Vector3 originOffset;
+        private readonly GameObject parent;
 
         private Dictionary<string, int> products;
         public List<GameObject> CubeObjects { get; private set; }
@@ -53,6 +56,7 @@ namespace Assets.Scripts {
         void BuildVisualVolumes() {
             foreach (var block in cubeIqData.Blocks.Block) {
                 GameObject cube = Object.Instantiate(cubePrefab, (VisualizationServices.ToVolume(block.Widthcoord, block.Heightcoord, block.Depthcoord) + originOffset) * 0.0254f, Quaternion.identity);
+
                 cube.transform.localScale = new Vector3(float.Parse(block.Width), float.Parse(block.Height), float.Parse(block.Length)) * 0.0254f;
 
                 containerBounds.Encapsulate(cube.GetComponentInChildren<Renderer>().bounds);
@@ -64,6 +68,8 @@ namespace Assets.Scripts {
                 cube.transform.GetChild(0).gameObject.name = block.Productid;
 
                 CubeObjects.Add(cube);
+
+                cube.transform.parent = parent.transform;
             }
 
             var palletHeight = 1f * 0.0254f;
@@ -74,6 +80,7 @@ namespace Assets.Scripts {
             pallet.GetComponentInChildren<ContainerItem>().SetMaterials(materialCollection, Color.magenta);
             pallet.transform.GetChild(0).gameObject.name = "Pallet";
             CubeObjects.Add(pallet);
+            pallet.transform.parent = parent.transform;
         }
 
         public Vector3 VolumeCenter { get { return containerBounds.center; } }

@@ -1,7 +1,6 @@
 ﻿
 using System;
 using HoloToolkit.Unity;
-using HoloToolkit.Unity.InputModule;
 using UnityEngine;
 
 public class SpatialMapState : Singleton<SpatialMapState> {
@@ -14,6 +13,8 @@ public class SpatialMapState : Singleton<SpatialMapState> {
     public SpatialUnderstandingDll.Imports.PlayspaceStats SpatialStats { get; private set; }
     public SpatialUnderstanding.ScanStates SpatialScanState { get { return spatialUnderstanding.ScanState; } }
 
+    private bool finishRequested;
+
     void Start () {
         
         SpatialStats = new SpatialUnderstandingDll.Imports.PlayspaceStats();
@@ -22,6 +23,11 @@ public class SpatialMapState : Singleton<SpatialMapState> {
     }
 
     public void FinishScanning() {
+
+        if (finishRequested)
+            return;
+
+        finishRequested = true;
         spatialUnderstanding.RequestFinishScan();
     }
 	

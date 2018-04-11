@@ -82,7 +82,7 @@ public class ContainerVisualizer : MonoBehaviour {
         if(visualContainerCollection != null)
             visualContainerCollection.Dispose();
 
-        visualContainerCollection = new VisualContainerCollection(cubeIq, cubePrefab, materialCollection, originOffset);
+        visualContainerCollection = new VisualContainerCollection(cubeIq, gameObject, cubePrefab, materialCollection, originOffset);
         cameraTarget.transform.position = visualContainerCollection.VolumeCenter;
 
         containerCollectionAnimator = new ContainerCollectionAnimator(visualContainerCollection.CubeObjects, 1f, .1f);
