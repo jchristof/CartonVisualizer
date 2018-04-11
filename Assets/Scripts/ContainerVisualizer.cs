@@ -65,6 +65,8 @@ public class ContainerVisualizer : MonoBehaviour {
             containerCollectionAnimator.Run();
     }
 
+    public Bounds ContainerBounds { get { return visualContainerCollection != null ? visualContainerCollection.ContainerBounds : new Bounds(Vector3.zero, Vector3.one); } }
+
     private CubeiqContainer.Cubeiq Create(string fullname) {
         using (var r = File.OpenText(fullname)) {
             string xml = r.ReadToEnd();

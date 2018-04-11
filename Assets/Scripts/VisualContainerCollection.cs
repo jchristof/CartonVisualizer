@@ -48,6 +48,7 @@ namespace Assets.Scripts {
         public List<GameObject> CubeObjects { get; private set; }
 
         private Bounds containerBounds = new Bounds(Vector3.zero, Vector3.zero);
+        public Bounds ContainerBounds { get { return containerBounds; } }
 
         void BuildVisualVolumes() {
             foreach (var block in cubeIqData.Blocks.Block) {
