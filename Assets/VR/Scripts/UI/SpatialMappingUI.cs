@@ -2,7 +2,6 @@
 using HoloToolkit.Unity.InputModule;
 using HoloToolkit.Unity.SpatialMapping;
 using UnityEngine;
-using UnityEngine.XR.WSA;
 
 public class SpatialMappingUI : MonoBehaviour, IInputClickHandler, ISourceStateHandler {
 
@@ -20,6 +19,7 @@ public class SpatialMappingUI : MonoBehaviour, IInputClickHandler, ISourceStateH
     }
 	
 	void Update () {
+
 	    if (spatialMapState == null) {
 
 	        var spatialMapperGameObject = GameObject.Find("SpatialMapper");
@@ -42,6 +42,8 @@ public class SpatialMappingUI : MonoBehaviour, IInputClickHandler, ISourceStateH
 
     private bool loaded;
     public void OnInputClicked(InputClickedEventData eventData) {
+        InputManager.Instance.PopFallbackInputHandler();
+
         spatialMapState.FinishScanning();
 
         var containerGameObject = GameObject.Find("Container");
@@ -59,6 +61,8 @@ public class SpatialMappingUI : MonoBehaviour, IInputClickHandler, ISourceStateH
         RaycastHit hitInfo;
         if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hitInfo, 30.0f, SpatialMappingManager.Instance.LayerMask))
             containerGameObject.GetComponentInChildren<ContainerVisualizer>().PlaceBottomCenterAt(hitInfo.point);
+
+        Destroy(gameObject);
     }
 
     public void OnSourceDetected(SourceStateEventData eventData) {

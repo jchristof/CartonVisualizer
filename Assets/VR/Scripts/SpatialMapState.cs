@@ -6,14 +6,12 @@ using UnityEngine;
 public class SpatialMapState : Singleton<SpatialMapState> {
 
     private Action updateAction = () => { };
-
+    private Action finishAction;
     private SpatialUnderstanding spatialUnderstanding;
     private SpatialUnderstanding.ScanStates lastScanState;
 
     public SpatialUnderstandingDll.Imports.PlayspaceStats SpatialStats { get; private set; }
     public SpatialUnderstanding.ScanStates SpatialScanState { get { return spatialUnderstanding.ScanState; } }
-
-    private bool finishRequested;
 
     void Start () {
         
@@ -24,11 +22,12 @@ public class SpatialMapState : Singleton<SpatialMapState> {
 
     public void FinishScanning() {
 
-        if (finishRequested)
+        if (finishAction == null)
             return;
 
-        finishRequested = true;
-        spatialUnderstanding.RequestFinishScan();
+        finishAction();
+
+        finishAction = null;
     }
 	
 	void Update () {
@@ -50,6 +49,7 @@ public class SpatialMapState : Singleton<SpatialMapState> {
                 updateAction = () => { };
                 break;
             case SpatialUnderstanding.ScanStates.Scanning:
+                finishAction = () => spatialUnderstanding.RequestFinishScan();
                 updateAction = () => {
                     IntPtr statsPtr = spatialUnderstanding.UnderstandingDLL.GetStaticPlayspaceStatsPtr();
                     if (SpatialUnderstandingDll.Imports.QueryPlayspaceStats(statsPtr) == 0) {
