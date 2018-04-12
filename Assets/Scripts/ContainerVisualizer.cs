@@ -65,6 +65,13 @@ public class ContainerVisualizer : MonoBehaviour {
             containerCollectionAnimator.Run();
     }
 
+    public void PlaceBottomCenterAt(Vector3 point) {
+        var halfExtents = ContainerBounds.extents / 2;
+
+        gameObject.transform.position = new Vector3(point.x - halfExtents.x, point.y, point.z - halfExtents.z);
+
+    }
+
     public Bounds ContainerBounds { get { return visualContainerCollection != null ? visualContainerCollection.ContainerBounds : new Bounds(Vector3.zero, Vector3.one); } }
 
     private CubeiqContainer.Cubeiq Create(string fullname) {

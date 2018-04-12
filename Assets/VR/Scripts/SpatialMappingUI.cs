@@ -2,6 +2,7 @@
 using HoloToolkit.Unity.InputModule;
 using HoloToolkit.Unity.SpatialMapping;
 using UnityEngine;
+using UnityEngine.XR.WSA;
 
 public class SpatialMappingUI : MonoBehaviour, IInputClickHandler, ISourceStateHandler {
 
@@ -39,6 +40,7 @@ public class SpatialMappingUI : MonoBehaviour, IInputClickHandler, ISourceStateH
 	    title.text = "Scan state: " + spatialMapState.SpatialScanState;
 	}
 
+    private bool loaded;
     public void OnInputClicked(InputClickedEventData eventData) {
         spatialMapState.FinishScanning();
 
@@ -46,20 +48,17 @@ public class SpatialMappingUI : MonoBehaviour, IInputClickHandler, ISourceStateH
         if(containerGameObject == null)
             return;
 
-        containerGameObject.GetComponentInChildren<ContainerVisualizer>().LoadOne();
+        if(!loaded)
+            containerGameObject.GetComponentInChildren<ContainerVisualizer>().LoadOne();
+
+        loaded = true;
 
         if (SpatialMappingManager.Instance == null)
             return;
 
-        var colChildren = containerGameObject.GetComponentsInChildren<Collider>();
-        foreach (var colChild in colChildren) {
-            colChild.enabled = false;
-        }
-
         RaycastHit hitInfo;
-        if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hitInfo, 30.0f, SpatialMappingManager.Instance.LayerMask)) 
-            GameObject.Find("Container").transform.position = hitInfo.point;
-            
+        if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hitInfo, 30.0f, SpatialMappingManager.Instance.LayerMask))
+            containerGameObject.GetComponentInChildren<ContainerVisualizer>().PlaceBottomCenterAt(hitInfo.point);
     }
 
     public void OnSourceDetected(SourceStateEventData eventData) {
