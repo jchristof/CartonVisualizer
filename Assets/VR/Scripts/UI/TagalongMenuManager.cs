@@ -12,6 +12,11 @@ public class TagalongMenuManager : MonoBehaviour {
 	    currentUI = Instantiate(spatialMappingUI, gameObject.transform);
 	}
 
+    public void NextMenu() {
+        Destroy(currentUI);
+
+        currentUI = Instantiate(blockDetailsUI, gameObject.transform);
+    }
 	void Update () {
 		
 	}
