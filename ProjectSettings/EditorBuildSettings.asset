@@ -8,6 +8,3 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/HoloTest.unity
     guid: c7701f6ed3951974d9495e5f96f1ab3d
-  - enabled: 0
-    path: Assets/Holo.unity
-    guid: 2d9df6a08dec8404d810f9009f18a30c
