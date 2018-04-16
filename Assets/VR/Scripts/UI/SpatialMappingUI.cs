@@ -62,7 +62,7 @@ public class SpatialMappingUI : MonoBehaviour, IInputClickHandler, ISourceStateH
         if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hitInfo, 30.0f, SpatialMappingManager.Instance.LayerMask))
             containerGameObject.GetComponentInChildren<ContainerVisualizer>().PlaceBottomCenterAt(hitInfo.point);
 
-        GetComponentInParent<TagalongMenuManager>().NextMenu();
+        //GetComponentInParent<TagalongMenuManager>().NextMenu();
     }
 
     public void OnSourceDetected(SourceStateEventData eventData) {

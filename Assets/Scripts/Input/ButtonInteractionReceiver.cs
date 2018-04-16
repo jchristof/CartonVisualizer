@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿
 using HoloToolkit.Unity.InputModule;
 using HoloToolkit.Unity.Receivers;
 using UnityEngine;
