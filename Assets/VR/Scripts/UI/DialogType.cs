@@ -2,5 +2,7 @@
 public enum DialogType {
     Welcome,
     FinalizeScan,
-    PlaceLoad
+    PlaceLoad,
+    PackingMain,
+    PackingOperationsToolbar
 }

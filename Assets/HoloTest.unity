@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481694, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -576,6 +576,12 @@ MonoBehaviour:
     type: 2}
   placeLoadDialog: {fileID: 1448159104931680, guid: 1112d1b981638074d8167df3f8265711,
     type: 2}
+  packingMain: {fileID: 1573883888473374, guid: f6f7a20311f27264bba46916f17485ce,
+    type: 2}
+  packingSequence: {fileID: 1748475129147758, guid: 1890700f401d3c949bbce3ebf3afa726,
+    type: 2}
+  packingPlacement: {fileID: 0}
+  packingManipulation: {fileID: 0}
 --- !u!1001 &1177294639
 Prefab:
   m_ObjectHideFlags: 0

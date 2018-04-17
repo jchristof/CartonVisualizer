@@ -6,6 +6,10 @@ public class TagalongMenuManager : MonoBehaviour {
     public GameObject welcomeDialog;
     public GameObject scanOrLoadDialog;
     public GameObject placeLoadDialog;
+    public GameObject packingMain;
+    public GameObject packingSequence;
+    public GameObject packingPlacement;
+    public GameObject packingManipulation;
 
     private GameObject currentUI;
 
@@ -26,6 +30,10 @@ public class TagalongMenuManager : MonoBehaviour {
             currentUI = Instantiate(placeLoadDialog, gameObject.transform);
             currentUI.GetComponentInChildren<IDialog>().DialogResult = Result;
         }
-        
+        else if (dialog.DialogType == DialogType.FinalizeScan) {
+            currentUI = Instantiate(placeLoadDialog, gameObject.transform);
+            currentUI.GetComponentInChildren<IDialog>().DialogResult = Result;
+        }
+
     }
 }
