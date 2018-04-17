@@ -1,19 +1,16 @@
 ﻿
-using System;
-using HoloToolkit.Unity.InputModule;
-using HoloToolkit.Unity.Receivers;
-using UnityEngine;
+namespace Assets.VR.Scripts.UI {
 
-public class WelcomeDialog : InteractionReceiver, IDialog {
+    public class WelcomeDialog : InteractiveMenu {
 
-    protected override void InputDown(GameObject obj, InputEventData eventData) {
-        base.InputDown(obj, eventData);
+        protected override void ButtonInputDown(string buttonId) {
 
-        if(DialogResult != null)
-            DialogResult("Continue");
+            if (DialogResult != null)
+                DialogResult("Continue");
+        }
+
+        public override DialogType DialogType {get { return DialogType.Welcome; }}
+
     }
-
-    public Action<string> DialogResult { get; set; }
-    public DialogType DialogType {get { return DialogType.Welcome; }}
 
 }

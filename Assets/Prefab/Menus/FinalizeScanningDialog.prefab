@@ -1936,7 +1936,7 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 2
   MinViewDegrees: 0
-  MaxViewDegrees: 10
+  MaxViewDegrees: 45
   AspectV: 1
   IgnoreAngleClamp: 0
   IgnoreDistanceClamp: 0
@@ -2078,8 +2078,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d45dcf3587b42b34e862935271a732b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactables:
-  - {fileID: 1594434563791108}
+  interactables: []
   Targets: []
   lockFocus: 0
 --- !u!114 &114515452812314200

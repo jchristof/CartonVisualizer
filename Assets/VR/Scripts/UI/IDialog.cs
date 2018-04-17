@@ -1,8 +1,12 @@
 ﻿using System;
 
-public interface IDialog {
+namespace Assets.VR.Scripts.UI {
 
-    Action<string> DialogResult { get; set; }
-    DialogType DialogType { get; }
+    public interface IDialog {
+
+        Action<object> DialogResult { get; set; }
+        DialogType DialogType { get; }
+
+    }
 
 }

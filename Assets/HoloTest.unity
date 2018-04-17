@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481694, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -473,10 +473,6 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 1146334653}
-  - component: {fileID: 1146334652}
-  - component: {fileID: 1146334651}
-  - component: {fileID: 1146334650}
-  - component: {fileID: 1146334654}
   - component: {fileID: 1146334655}
   m_Layer: 0
   m_Name: MenuManager
@@ -485,54 +481,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1146334650
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1146334649}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2be8bd2ebd8277c448d6d81c75517fee, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  TagalongDistance: 3
-  EnforceDistance: 0
-  PositionUpdateSpeed: 9.8
-  SmoothMotion: 1
-  SmoothingFactor: 0.75
---- !u!114 &1146334651
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1146334649}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fb69de839bd015f4099b5bd2c45e53e5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  UseUnscaledTime: 1
-  PositionPerSecond: 30
-  RotationDegreesPerSecond: 720
-  RotationSpeedScaler: 0
-  ScalePerSecond: 5
-  SmoothLerpToTarget: 0
-  SmoothPositionLerpRatio: 0.5
-  SmoothRotationLerpRatio: 0.5
-  SmoothScaleLerpRatio: 0.5
---- !u!65 &1146334652
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1146334649}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!4 &1146334653
 Transform:
   m_ObjectHideFlags: 0
@@ -546,19 +494,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1146334654
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1146334649}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac8d5b128a1d8204fb76c86f47b75912, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  PivotAxis: 1
-  TargetTransform: {fileID: 0}
 --- !u!114 &1146334655
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -576,12 +511,13 @@ MonoBehaviour:
     type: 2}
   placeLoadDialog: {fileID: 1448159104931680, guid: 1112d1b981638074d8167df3f8265711,
     type: 2}
-  packingMain: {fileID: 1573883888473374, guid: f6f7a20311f27264bba46916f17485ce,
+  packingMain: {fileID: 1880470386310430, guid: f6f7a20311f27264bba46916f17485ce,
     type: 2}
-  packingSequence: {fileID: 1748475129147758, guid: 1890700f401d3c949bbce3ebf3afa726,
+  packingSequence: {fileID: 1667141642749522, guid: 1890700f401d3c949bbce3ebf3afa726,
     type: 2}
   packingPlacement: {fileID: 0}
-  packingManipulation: {fileID: 0}
+  packingVisualization: {fileID: 1891267541391714, guid: 3096a23607be9da4c8112c7ac4dc83f9,
+    type: 2}
 --- !u!1001 &1177294639
 Prefab:
   m_ObjectHideFlags: 0

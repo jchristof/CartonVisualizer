@@ -1,34 +1,34 @@
 ﻿
-using System;
-using HoloToolkit.Unity.InputModule;
-using HoloToolkit.Unity.Receivers;
 using UnityEngine;
 
-public class FinalizeScanningDialog : InteractionReceiver, IDialog {
+namespace Assets.VR.Scripts.UI {
 
-    private SpatialMapState spatialMapState;
+    public class FinalizeScanningDialog : InteractiveMenu {
 
-    void Update() {
-        if (spatialMapState == null) {
+        private SpatialMapState spatialMapState;
 
-            var spatialMapperGameObject = GameObject.Find("SpatialMapper");
+        void Update() {
+            if (spatialMapState == null) {
 
-            if (spatialMapperGameObject == null)
-                return;
+                var spatialMapperGameObject = GameObject.Find("SpatialMapper");
 
-            spatialMapState = spatialMapperGameObject.GetComponentInChildren<SpatialMapState>();
+                if (spatialMapperGameObject == null)
+                    return;
+
+                spatialMapState = spatialMapperGameObject.GetComponentInChildren<SpatialMapState>();
+            }
         }
+
+        protected override void ButtonInputDown(string buttonId) {
+
+            spatialMapState.FinishScanning();
+
+            if (DialogResult != null)
+                DialogResult("Finalize");
+        }
+
+        public override DialogType DialogType { get { return DialogType.FinalizeScan; } }
+
     }
-    protected override void InputDown(GameObject obj, InputEventData eventData) {
-        base.InputDown(obj, eventData);
-
-        spatialMapState.FinishScanning();
-
-        if (DialogResult != null)
-            DialogResult("Finalize");
-    }
-
-    public Action<string> DialogResult { get; set; }
-    public DialogType DialogType { get { return DialogType.FinalizeScan; } }
 
 }

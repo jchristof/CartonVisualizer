@@ -4,5 +4,6 @@ public enum DialogType {
     FinalizeScan,
     PlaceLoad,
     PackingMain,
+    PackingVisualizer,
     PackingOperationsToolbar
 }

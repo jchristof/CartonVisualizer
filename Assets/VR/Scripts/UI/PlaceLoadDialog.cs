@@ -1,36 +1,38 @@
-﻿using System;
-using HoloToolkit.Unity.InputModule;
+﻿using HoloToolkit.Unity.InputModule;
 using HoloToolkit.Unity.SpatialMapping;
 using UnityEngine;
 
-public class PlaceLoadDialog : MonoBehaviour, IInputClickHandler, IDialog {
+namespace Assets.VR.Scripts.UI {
 
-    void Start() {
-        InputManager.Instance.PushFallbackInputHandler(gameObject);
-    }
+    public class PlaceLoadDialog : InteractiveMenu , IInputClickHandler {
 
-    public Action<string> DialogResult { get; set; }
-    public DialogType DialogType { get { return DialogType.PlaceLoad; } }
+        public override void Start() {
+            base.Start();
+            InputManager.Instance.PushFallbackInputHandler(gameObject);
+        }
 
-    public void OnInputClicked(InputClickedEventData eventData) {
-        InputManager.Instance.PopFallbackInputHandler();
+        public override DialogType DialogType { get { return DialogType.PlaceLoad; } }
 
+        public new void OnInputClicked(InputClickedEventData eventData) {
+            InputManager.Instance.PopFallbackInputHandler();
 
-        var containerGameObject = GameObject.Find("Container");
-        if (containerGameObject == null)
-            return;
+            var containerGameObject = GameObject.Find("Container");
+            if (containerGameObject == null)
+                return;
 
-       containerGameObject.GetComponentInChildren<ContainerVisualizer>().LoadOne();
+            containerGameObject.GetComponentInChildren<ContainerVisualizer>().LoadOne();
 
-        if (SpatialMappingManager.Instance == null)
-            return;
+            if (SpatialMappingManager.Instance == null)
+                return;
 
-        RaycastHit hitInfo;
-        if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hitInfo, 30.0f, SpatialMappingManager.Instance.LayerMask))
-            containerGameObject.GetComponentInChildren<ContainerVisualizer>().PlaceBottomCenterAt(hitInfo.point);
+            RaycastHit hitInfo;
+            if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hitInfo, 30.0f, SpatialMappingManager.Instance.LayerMask))
+                containerGameObject.GetComponentInChildren<ContainerVisualizer>().PlaceBottomCenterAt(hitInfo.point);
 
-        if (DialogResult != null)
-            DialogResult("");
+            if (DialogResult != null)
+                DialogResult("");
+        }
+
     }
 
 }
