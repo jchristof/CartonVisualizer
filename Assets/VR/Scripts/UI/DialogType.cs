@@ -1,5 +1,6 @@
 ﻿
 public enum DialogType {
+    None,
     Welcome,
     FinalizeScan,
     PlaceLoad,

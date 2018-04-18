@@ -24,7 +24,10 @@ namespace Assets.VR.Scripts.UI {
                 keywordRecognizer.OnPhraseRecognized += args => {
                     ButtonInputDown(args.text);
                 };
+
+                keywordRecognizer.Start();
             }
+
         }
 
         void OnDestroy() {
@@ -32,8 +35,12 @@ namespace Assets.VR.Scripts.UI {
 
         protected override void InputDown(GameObject obj, InputEventData eventData) {
             base.InputDown(obj, eventData);
-            
-            ButtonInputDown(obj.GetComponent<CompoundButtonText>().Text);
+
+            if (!eventData.used) {
+       
+                ButtonInputDown(obj.GetComponent<CompoundButtonText>().Text);
+                eventData.Use();
+            }
         }
 
         protected virtual void ButtonInputDown(string buttonId) { }

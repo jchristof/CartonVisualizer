@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using HoloToolkit.Unity;
 using UnityEngine;
 using UnityEngine.Windows.Speech;
 
@@ -14,17 +15,24 @@ namespace Assets.VR.Scripts.UI {
         public GameObject packingPlacement;
         public GameObject packingVisualization;
 
+        public AudioClip buttonClick;
+
         private GameObject currentUI;
+        private AudioSource audioSource;
 
         private KeywordRecognizer keywordRecognizer;
+        private TextToSpeech textToSpeech;
 
         void Start () {
-            currentUI = Instantiate(welcomeDialog, gameObject.transform);
+            currentUI = Instantiate(welcomeDialog, gameObject.transform); 
             currentUI.GetComponentInChildren<IDialog>().DialogResult = Result;
 
             keywordRecognizer = new KeywordRecognizer(new []{"main menu"});
             keywordRecognizer.OnPhraseRecognized += KeywordRecognizerOnOnPhraseRecognized;
             keywordRecognizer.Start();
+
+            textToSpeech = gameObject.GetComponentInChildren<TextToSpeech>();
+            audioSource = gameObject.GetComponentInChildren<AudioSource>();
         }
 
         private void KeywordRecognizerOnOnPhraseRecognized(PhraseRecognizedEventArgs args) {
@@ -36,10 +44,14 @@ namespace Assets.VR.Scripts.UI {
 
                 currentUI = Instantiate(packingMain, gameObject.transform);
                 currentUI.GetComponentInChildren<IDialog>().DialogResult = Result;
+
+                textToSpeech.StartSpeaking(TitleText(currentUI) + MessageText(currentUI));
             }
         }
 
         public void Result(object value) {
+            audioSource.PlayOneShot(buttonClick);
+    
             var dialog = currentUI.GetComponentInChildren<IDialog>();
             Destroy(currentUI);
 
@@ -70,6 +82,41 @@ namespace Assets.VR.Scripts.UI {
                 currentUI.GetComponentInChildren<IDialog>().DialogResult = Result;
             }
 
+            textToSpeech.StartSpeaking(TitleText(currentUI) + MessageText(currentUI));
+        }
+
+        private static string TitleText(GameObject currentUI) {
+            if (currentUI == null)
+                return "";
+
+            var titleTextObject = currentUI.transform.Find("TitleText");
+
+            if (titleTextObject == null)
+                return "";
+
+            var textMesh = titleTextObject.GetComponentInChildren<TextMesh>();
+
+            if (textMesh == null)
+                return "";
+
+            return textMesh.text;
+        }
+
+        private static string MessageText(GameObject currentUI) {
+            if (currentUI == null)
+                return "";
+
+            var titleTextObject = currentUI.transform.Find("TitleMessage");
+
+            if (titleTextObject == null)
+                return "";
+
+            var textMesh = titleTextObject.GetComponentInChildren<TextMesh>();
+
+            if (textMesh == null)
+                return "";
+
+            return textMesh.text;
         }
     }
 
