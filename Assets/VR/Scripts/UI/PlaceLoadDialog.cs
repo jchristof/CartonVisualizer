@@ -14,6 +14,9 @@ namespace Assets.VR.Scripts.UI {
         public override DialogType DialogType { get { return DialogType.PlaceLoad; } }
 
         public new void OnInputClicked(InputClickedEventData eventData) {
+            if (eventData.used)
+                return;
+
             InputManager.Instance.PopFallbackInputHandler();
 
             var containerGameObject = GameObject.Find("Container");

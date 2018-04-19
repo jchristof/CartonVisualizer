@@ -14,19 +14,16 @@ namespace Assets.VR.Scripts.UI {
 
             var uiComponents = GetComponentsInChildren<TextMesh>();
             detail = uiComponents.FirstOrDefault(x => x.name == "Detail");
+
+            var spatialMapperGameObject = GameObject.Find("SpatialMapper");
+
+            if (spatialMapperGameObject == null)
+                return;
+
+            spatialMapState = spatialMapperGameObject.GetComponentInChildren<SpatialMapState>();
         }
 
         void Update() {
-            if (spatialMapState == null) {
-
-                var spatialMapperGameObject = GameObject.Find("SpatialMapper");
-
-                if (spatialMapperGameObject == null)
-                    return;
-
-                spatialMapState = spatialMapperGameObject.GetComponentInChildren<SpatialMapState>();
-            }
-
             var stats = spatialMapState.SpatialStats;
 
             var detailsString = string.Format("totalArea={0:0.0}, horiz={1:0.0}, wall={2:0.0}", stats.TotalSurfaceArea, stats.HorizSurfaceArea, stats.WallSurfaceArea);
