@@ -14,6 +14,8 @@ namespace Assets.VR.Scripts.UI {
 
         // Register this menu's compound button objects
         public virtual void Start () {
+            iTween.FadeFrom(gameObject, 0, 3f);
+            iTween.ScaleFrom(gameObject, Vector3.zero, 1f);
             var compoundButtonsText = gameObject.GetComponentsInChildren<CompoundButtonText>();
             interactables = compoundButtonsText.Select(x => x.gameObject).ToList();
 
