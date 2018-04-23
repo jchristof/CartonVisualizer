@@ -546,6 +546,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e27882f34df7a842a1509deee7fe75b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dialogs:
+  - type: 1
+    dialog: {fileID: 1320330496966106, guid: 604717c39ab1bd948b8adc1668d66593, type: 2}
+  - type: 2
+    dialog: {fileID: 1770613791339100, guid: b1f0120cd702b904fb681ade494568c6, type: 2}
+  - type: 3
+    dialog: {fileID: 1448159104931680, guid: 1112d1b981638074d8167df3f8265711, type: 2}
+  - type: 4
+    dialog: {fileID: 1880470386310430, guid: f6f7a20311f27264bba46916f17485ce, type: 2}
+  - type: 5
+    dialog: {fileID: 1891267541391714, guid: 3096a23607be9da4c8112c7ac4dc83f9, type: 2}
+  - type: 6
+    dialog: {fileID: 1880470386310430, guid: f6f7a20311f27264bba46916f17485ce, type: 2}
+  - type: 7
+    dialog: {fileID: 1667141642749522, guid: 1890700f401d3c949bbce3ebf3afa726, type: 2}
   welcomeDialog: {fileID: 1320330496966106, guid: 604717c39ab1bd948b8adc1668d66593,
     type: 2}
   scanOrLoadDialog: {fileID: 1770613791339100, guid: b1f0120cd702b904fb681ade494568c6,
@@ -559,7 +574,7 @@ MonoBehaviour:
   packingPlacement: {fileID: 0}
   packingVisualization: {fileID: 1891267541391714, guid: 3096a23607be9da4c8112c7ac4dc83f9,
     type: 2}
-  buttonClick: {fileID: 0}
+  buttonClick: {fileID: 8300000, guid: 808393ca6703a5e48912cd9e2093b0a1, type: 3}
 --- !u!1001 &1177294639
 Prefab:
   m_ObjectHideFlags: 0

@@ -6,5 +6,8 @@ public enum DialogType {
     PlaceLoad,
     PackingMain,
     PackingVisualizer,
-    PackingOperationsToolbar
+    PackingOperationsToolbar,
+    PackingSequence,
+
+
 }

@@ -1,6 +1,7 @@
 ﻿
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Xml.Linq;
 using HoloToolkit.Unity;
 using UnityEngine;
@@ -9,6 +10,13 @@ using UnityEngine.Windows.Speech;
 namespace Assets.VR.Scripts.UI {
 
     public class MenuManager : MonoBehaviour {
+
+        [Serializable]
+        public struct DialogMenus {
+            public DialogType type;
+            public GameObject dialog;
+        }
+        public DialogMenus[] dialogs;
 
         public GameObject welcomeDialog;
         public GameObject scanOrLoadDialog;
@@ -28,17 +36,15 @@ namespace Assets.VR.Scripts.UI {
         private Stack<DialogType> dialogStack = new Stack<DialogType>();
 
         void Start () {
-            currentUI = Instantiate(welcomeDialog, gameObject.transform); 
-            currentUI.GetComponentInChildren<IDialog>().DialogResult = Result;
 
-            keywordRecognizer = new KeywordRecognizer(new []{"main menu"});
+            keywordRecognizer = new KeywordRecognizer(new []{"main menu", "back"});
             keywordRecognizer.OnPhraseRecognized += KeywordRecognizerOnOnPhraseRecognized;
             keywordRecognizer.Start();
 
             textToSpeech = gameObject.GetComponentInChildren<TextToSpeech>();
             audioSource = gameObject.GetComponentInChildren<AudioSource>();
 
-            SpeakTheMenuText(currentUI);
+            CreateNewDialog(DialogType.Welcome);
         }
 
         private void KeywordRecognizerOnOnPhraseRecognized(PhraseRecognizedEventArgs args) {
@@ -53,6 +59,26 @@ namespace Assets.VR.Scripts.UI {
 
                 textToSpeech.StartSpeaking(TitleText(currentUI) + MessageText(currentUI));
             }
+            else if (args.text == "back") {
+                var dialog = dialogStack.Count > 0 ? dialogStack.Pop() : DialogType.None;
+                if (dialog == DialogType.None) {
+                    currentUI = null;
+                    return;
+                }
+
+                CreateNewDialog(dialog);
+            }
+        }
+
+        private void CreateNewDialog(DialogType dialogType) {
+
+            var dialog = dialogs.FirstOrDefault(x => x.type == dialogType);
+
+            dialogStack.Push(dialogType);
+            currentUI = Instantiate(dialog.dialog, gameObject.transform);
+            currentUI.GetComponentInChildren<IDialog>().DialogResult = Result;
+
+            SpeakTheMenuText(currentUI);
         }
 
         public void Result(object value) {
@@ -63,34 +89,33 @@ namespace Assets.VR.Scripts.UI {
 
             Destroy(currentUI);
 
-            if (dialog.DialogType == DialogType.Welcome) {
-                currentUI = Instantiate(scanOrLoadDialog, gameObject.transform);
-                currentUI.GetComponentInChildren<IDialog>().DialogResult = Result;
-            }
-            else if (dialog.DialogType == DialogType.FinalizeScan) {
-                currentUI = Instantiate(placeLoadDialog, gameObject.transform);
-                currentUI.GetComponentInChildren<IDialog>().DialogResult = Result;
-            }
-            else if (dialog.DialogType == DialogType.PlaceLoad) {
-                currentUI = Instantiate(packingMain, gameObject.transform);
-                currentUI.GetComponentInChildren<IDialog>().DialogResult = Result;
-            }
-            else if (dialog.DialogType == DialogType.PackingMain) {
-                if (value as string == "Load Sequence") {
-                    currentUI = Instantiate(packingSequence, gameObject.transform);
-                    currentUI.GetComponentInChildren<IDialog>().DialogResult = Result;
-                }
-                else if (value as string == "Visualization") {
-                    currentUI = Instantiate(packingVisualization, gameObject.transform);
-                    currentUI.GetComponentInChildren<IDialog>().DialogResult = Result;
-                }
-            }
-            else if (dialog.DialogType == DialogType.PackingVisualizer) {
-                currentUI = Instantiate(packingMain, gameObject.transform);
-                currentUI.GetComponentInChildren<IDialog>().DialogResult = Result;
-            }
+            switch (dialog.DialogType) {
+                case DialogType.Welcome:
+                    CreateNewDialog(DialogType.FinalizeScan);
+                    break;
 
-            SpeakTheMenuText(currentUI);
+                case DialogType.FinalizeScan:
+                    CreateNewDialog(DialogType.PlaceLoad);
+                    break;
+
+                case DialogType.PlaceLoad:
+                    CreateNewDialog(DialogType.PackingMain);
+                    break;
+
+                case DialogType.PackingMain:
+                    if (value as string == "Load Sequence") {
+                        CreateNewDialog(DialogType.PackingSequence);
+                    }
+                    else if (value as string == "Visualization") {
+                        CreateNewDialog(DialogType.PackingVisualizer);
+                    }
+                    break;
+                case DialogType.PackingSequence:
+                case DialogType.PackingVisualizer:
+                    CreateNewDialog(DialogType.PackingMain);
+                    break;
+
+            } 
         }
 
         private void SpeakTheMenuText(GameObject currentUI) {
