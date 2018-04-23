@@ -18,14 +18,6 @@ namespace Assets.VR.Scripts.UI {
         }
         public DialogMenus[] dialogs;
 
-        public GameObject welcomeDialog;
-        public GameObject scanOrLoadDialog;
-        public GameObject placeLoadDialog;
-        public GameObject packingMain;
-        public GameObject packingSequence;
-        public GameObject packingPlacement;
-        public GameObject packingVisualization;
-
         public AudioClip buttonClick;
 
         private GameObject currentUI;
@@ -54,7 +46,8 @@ namespace Assets.VR.Scripts.UI {
 
                 Destroy(currentUI);
 
-                currentUI = Instantiate(packingMain, gameObject.transform);
+                var packingMainMenu = dialogs.FirstOrDefault(x=>x.type == DialogType.PackingMain);
+                currentUI = Instantiate(packingMainMenu.dialog, gameObject.transform);
                 currentUI.GetComponentInChildren<IDialog>().DialogResult = Result;
 
                 textToSpeech.StartSpeaking(TitleText(currentUI) + MessageText(currentUI));
