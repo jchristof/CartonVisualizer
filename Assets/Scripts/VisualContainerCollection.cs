@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Assets.VR.Scripts;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -75,7 +76,10 @@ namespace Assets.Scripts {
             var palletHeight = 1f * 0.0254f;
 
             var pallet = Object.Instantiate(cubePrefab, new Vector3(containerBounds.center.x - containerBounds.extents.x, -palletHeight, containerBounds.center.z - containerBounds.extents.z) + originOffset, Quaternion.identity);
-         
+
+            pallet.AddComponent<Interactible>();
+            pallet.AddComponent<ContainerGestureAction>();
+
             pallet.transform.localScale = new Vector3(containerBounds.size.x, palletHeight, containerBounds.size.z) ;
             pallet.GetComponentInChildren<ContainerItem>().SetMaterials(materialCollection, Color.magenta);
             pallet.transform.GetChild(0).gameObject.name = "Pallet";

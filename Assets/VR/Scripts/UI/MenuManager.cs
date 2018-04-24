@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
 using HoloToolkit.Unity;
+using HoloToolkit.Unity.SpatialMapping;
 using UnityEngine;
 using UnityEngine.Windows.Speech;
 
@@ -37,6 +38,47 @@ namespace Assets.VR.Scripts.UI {
             audioSource = gameObject.GetComponentInChildren<AudioSource>();
 
             CreateNewDialog(DialogType.Welcome);
+
+            SurfaceMeshesToPlanes.Instance.MakePlanesComplete += InstanceOnMakePlanesComplete;
+        }
+
+        private int minimumFloors;
+
+        private void InstanceOnMakePlanesComplete(object source, EventArgs args) {
+            List<GameObject> floors = new List<GameObject>();
+            floors = SurfaceMeshesToPlanes.Instance.GetActivePlanes(PlaneTypes.Floor);
+
+            // Check to see if we have enough floors (minimumFloors) to start processing.
+            if (floors.Count >= minimumFloors) {
+                // Reduce our triangle count by removing any triangles
+                // from SpatialMapping meshes that intersect with active planes.
+                RemoveVertices(SurfaceMeshesToPlanes.Instance.ActivePlanes);
+
+                // After scanning is over, switch to the secondary (occlusion) material.
+               // SpatialMappingManager.Instance.SetSurfaceMaterial(secondaryMaterial);
+            }
+            else {
+                // Re-enter scanning mode so the user can find more surfaces before processing.
+                SpatialMappingManager.Instance.StartObserver();
+
+                // Re-process spatial data after scanning completes.
+                //meshesProcessed = false;
+            }
+        }
+
+        private void CreatePlanes() {
+            // Generate planes based on the spatial map.
+            SurfaceMeshesToPlanes surfaceToPlanes = SurfaceMeshesToPlanes.Instance;
+            if (surfaceToPlanes != null && surfaceToPlanes.enabled) {
+                surfaceToPlanes.MakePlanes();
+            }
+        }
+
+        private void RemoveVertices(IEnumerable<GameObject> boundingObjects) {
+            RemoveSurfaceVertices removeVerts = RemoveSurfaceVertices.Instance;
+            if (removeVerts != null && removeVerts.enabled) {
+                removeVerts.RemoveSurfaceVerticesWithinBounds(boundingObjects);
+            }
         }
 
         private void KeywordRecognizerOnOnPhraseRecognized(PhraseRecognizedEventArgs args) {
@@ -89,6 +131,7 @@ namespace Assets.VR.Scripts.UI {
 
                 case DialogType.FinalizeScan:
                     CreateNewDialog(DialogType.PlaceLoad);
+                    CreatePlanes();
                     break;
 
                 case DialogType.PlaceLoad:
@@ -96,12 +139,12 @@ namespace Assets.VR.Scripts.UI {
                     break;
 
                 case DialogType.PackingMain:
-                    if (value as string == "Load Sequence") {
+                    if (value as string == "Load Sequence") 
                         CreateNewDialog(DialogType.PackingSequence);
-                    }
-                    else if (value as string == "Visualization") {
+                    
+                    else if (value as string == "Visualization") 
                         CreateNewDialog(DialogType.PackingVisualizer);
-                    }
+                    
                     break;
                 case DialogType.PackingSequence:
                 case DialogType.PackingVisualizer:

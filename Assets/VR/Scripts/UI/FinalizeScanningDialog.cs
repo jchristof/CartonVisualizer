@@ -1,5 +1,6 @@
 ﻿
 using System.Linq;
+using HoloToolkit.Unity.SpatialMapping;
 using UnityEngine;
 
 namespace Assets.VR.Scripts.UI {

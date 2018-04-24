@@ -1,5 +1,4 @@
-﻿//using Academy.HoloToolkit.Unity;
-
+﻿
 using UnityEngine;
 
 namespace Assets.VR.Scripts {
