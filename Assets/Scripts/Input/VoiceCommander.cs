@@ -29,6 +29,10 @@ namespace Assets.Scripts.Input {
                 GameObject.Find("Container").GetComponentInChildren<ContainerVisualizer>().Explode();
             });
 
+            keywords.Add("compact", () => {
+                GameObject.Find("Container").GetComponentInChildren<ContainerVisualizer>().Compact();
+            });
+
             keywords.Add("place container", ()=>{
                 new SpatialMapObjectPlacer();
             });

@@ -1,5 +1,4 @@
 ﻿
-
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,31 +13,25 @@ namespace Assets.Scripts {
         /// <param name="containers"></param>
         /// <param name="explodeMaxDistance"></param>
         /// <param name="speed"></param>
-        public ContainerCollectionAnimator(IList<GameObject> containers, float explodeMaxDistance, float speed) {
-            if(containers == null)
+        public ContainerCollectionAnimator(GameObject parentContainer, IList<GameObject> containers, float explodeMaxDistance, float time) {
+            if(parentContainer == null)
+                throw new ArgumentNullException("parentContainer");
+
+            if (containers == null)
                 throw new ArgumentNullException("containers");
 
-
+            this.parentContainer = parentContainer;
             this.containers = containers;
+
             this.explodeMaxDistance = explodeMaxDistance;
-            this.speed = speed;
-
-            bounds = new Bounds(Vector3.zero, Vector3.zero);
-            foreach (var cube in containers) {
-                Renderer renderer = cube.GetComponentInChildren<Renderer>();
-
-                if (renderer == null) {
-                    Debug.Log("Cube renderer null. Can't evaluate container volume");
-                    return;
-                }
-
-                bounds.Encapsulate(renderer.bounds);
-            }
+            this.time = time;
         }
 
+        private readonly GameObject parentContainer;
         private readonly IList<GameObject> containers;
+        private  IDictionary<GameObject,Vector3> originalPositions;
         private readonly float explodeMaxDistance;
-        private readonly float speed;
+        private readonly float time;
 
         private Bounds bounds;
 
@@ -49,36 +42,57 @@ namespace Assets.Scripts {
 
         }
 
-        public void Run() {
-            updateAction = () => {
+        public void PlaceBottomCenterAt(Vector3 point) {
+            bounds = parentContainer.GetComponent<Renderer>().bounds;
 
-                if (distance > explodeMaxDistance)
-                    updateAction = null;
+            var halfExtents = bounds.extents/2;
 
-                foreach (var cube in containers) {
-                    if(cube.name == "Pallet")
-                        continue;
-
-                    Vector3 fromPosition = bounds.center - new Vector3(0, bounds.extents.y/2, 0);
-                    Vector3 toPosition = cube.GetComponentInChildren<Renderer>().bounds.center + new Vector3(0, .5f, 0);
-                    Vector3 direction = toPosition - fromPosition;
-
-                    var rayNormal = direction.normalized;
-
-                    cube.transform.Translate(rayNormal * Mathf.Sin(distance / 10f) * Time.deltaTime * 10f);
-                }
-
-                distance += speed;
-            };
+            parentContainer.transform.position = new Vector3(point.x - halfExtents.x, point.y + bounds.extents.y, point.z - halfExtents.z);
         }
 
-        public void StepBackward() {
+        public void Explode() {
+            bounds = parentContainer.GetComponent<Renderer>().bounds;
+            originalPositions = new Dictionary<GameObject, Vector3>( );
+            foreach (var cube in containers) {
+                if (cube.name == "Pallet")
+                    continue;          
 
+                Vector3 fromPosition = bounds.center - new Vector3(0, bounds.extents.y, 0);
+                Vector3 toPosition = cube.GetComponentInChildren<Renderer>().bounds.center;
+                Vector3 direction = toPosition - fromPosition;
+
+                var rayNormal = direction.normalized;
+
+                if(!originalPositions.ContainsKey(cube))
+                    originalPositions.Add(cube, cube.transform.position);
+                iTween.MoveTo(cube, toPosition + rayNormal * explodeMaxDistance, time);
+            }
+        }
+
+        public void Compact() {
+            foreach (var kvp in originalPositions) {
+                iTween.MoveTo(kvp.Key, kvp.Value, time);
+            }
+
+            originalPositions.Clear();
         }
 
         public void Update() {
             if (updateAction != null)
                 updateAction();
+        }
+
+        void DrawLine(Vector3 start, Vector3 end, Color color, float duration = 0.2f) {
+            GameObject myLine = new GameObject();
+            myLine.transform.position = start;
+            myLine.AddComponent<LineRenderer>();
+            LineRenderer lr = myLine.GetComponent<LineRenderer>();
+            lr.material = new Material(Shader.Find("Legacy Shaders/Transparent/Diffuse"));
+            lr.SetColors(color, color);
+            lr.SetWidth(0.01f, 0.01f);
+            lr.SetPosition(0, start);
+            lr.SetPosition(1, end);
+            //GameObject.Destroy(myLine, duration);
         }
     }  
 }

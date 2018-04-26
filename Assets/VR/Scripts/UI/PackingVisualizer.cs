@@ -9,7 +9,8 @@ namespace Assets.VR.Scripts.UI {
 
             if(buttonId.ToLower() == "explode")
                 GameObject.Find("Container").GetComponentInChildren<ContainerVisualizer>().Explode();
-
+            else if(buttonId.ToLower() == "collapse")
+                GameObject.Find("Container").GetComponentInChildren<ContainerVisualizer>().Compact();
             if (DialogResult != null)
                 DialogResult("");
         }

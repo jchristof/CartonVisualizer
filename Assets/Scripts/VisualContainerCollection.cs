@@ -83,6 +83,8 @@ namespace Assets.Scripts {
             pallet.name = "Pallet";
             CubeObjects.Add(pallet);
             pallet.transform.parent = parent.transform;
+
+            FitContainerToBounds(1f);
         }
 
         // shrink-wrap the container to the bounding volume to let hololens manipulation rotate it
@@ -98,9 +100,9 @@ namespace Assets.Scripts {
             var newPosition = new Vector3(containerBounds.center.x, containerBounds.extents.y, containerBounds.center.z);
             containerObject.transform.position = newPosition;
 
-            foreach (Transform T in children) {
+            foreach (Transform T in children) 
                 T.parent = containerObject.transform;
-            }
+            
         }
 
         public Vector3 VolumeCenter { get { return containerBounds.center; } }

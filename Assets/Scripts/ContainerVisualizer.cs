@@ -62,14 +62,16 @@ public class ContainerVisualizer : MonoBehaviour {
 
     public void Explode() {
         if(containerCollectionAnimator != null)
-            containerCollectionAnimator.Run();
+            containerCollectionAnimator.Explode();
+    }
+
+    public void Compact() {
+        if(containerCollectionAnimator != null)
+            containerCollectionAnimator.Compact();
     }
 
     public void PlaceBottomCenterAt(Vector3 point) {
-        var halfExtents = ContainerBounds.extents / 2;
-
-        gameObject.transform.position = new Vector3(point.x - halfExtents.x, point.y + ContainerBounds.extents.y, point.z - halfExtents.z);
-
+        containerCollectionAnimator.PlaceBottomCenterAt(point);
     }
 
     public Bounds ContainerBounds { get { return visualContainerCollection != null ? visualContainerCollection.ContainerBounds : new Bounds(Vector3.zero, Vector3.one); } }
@@ -92,7 +94,7 @@ public class ContainerVisualizer : MonoBehaviour {
         visualContainerCollection = new VisualContainerCollection(cubeIq, gameObject, cubePrefab, materialCollection, originOffset);
         cameraTarget.transform.position = visualContainerCollection.VolumeCenter;
 
-        containerCollectionAnimator = new ContainerCollectionAnimator(visualContainerCollection.CubeObjects, 1f, .1f);
+        containerCollectionAnimator = new ContainerCollectionAnimator(gameObject, visualContainerCollection.CubeObjects, .05f, 3f);
     }
 
     void Update() {
