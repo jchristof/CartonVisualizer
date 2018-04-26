@@ -77,14 +77,37 @@ namespace Assets.Scripts {
 
             var pallet = Object.Instantiate(cubePrefab, new Vector3(containerBounds.center.x - containerBounds.extents.x, -palletHeight, containerBounds.center.z - containerBounds.extents.z) + originOffset, Quaternion.identity);
 
-            pallet.AddComponent<Interactible>();
-            pallet.AddComponent<ContainerGestureAction>();
+//            pallet.AddComponent<Interactible>();
+//            pallet.AddComponent<ContainerGestureAction>();
 
             pallet.transform.localScale = new Vector3(containerBounds.size.x, palletHeight, containerBounds.size.z) ;
             pallet.GetComponentInChildren<ContainerItem>().SetMaterials(materialCollection, Color.magenta);
             pallet.transform.GetChild(0).gameObject.name = "Pallet";
+            pallet.name = "Pallet";
             CubeObjects.Add(pallet);
             pallet.transform.parent = parent.transform;
+
+            FitContainerToBounds();
+        }
+
+        // shrink-wrap the container to the bounding volume to let hololens manipulation rotate it
+        private void FitContainerToBounds() {
+            var containerObject = GameObject.Find("Container");
+            var scaleFactor = new Vector3(1/containerBounds.size.x, 1/containerBounds.size.y, 1/containerBounds.size.z);
+
+            var children = new List<Transform>();
+            foreach (Transform T in containerObject.transform)
+                children.Add(T);
+
+            containerObject.transform.DetachChildren();
+            containerObject.transform.localScale = containerBounds.size;
+            var newPosition = new Vector3(containerBounds.center.x, containerBounds.extents.y, containerBounds.center.z);
+            containerObject.transform.position += newPosition;
+
+            foreach (Transform T in children) {
+                T.parent = containerObject.transform;
+                //T.transform.position -= newPosition;
+            }
         }
 
         public Vector3 VolumeCenter { get { return containerBounds.center; } }

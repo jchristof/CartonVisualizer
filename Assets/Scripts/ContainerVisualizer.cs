@@ -68,7 +68,7 @@ public class ContainerVisualizer : MonoBehaviour {
     public void PlaceBottomCenterAt(Vector3 point) {
         var halfExtents = ContainerBounds.extents / 2;
 
-        gameObject.transform.position = new Vector3(point.x - halfExtents.x, point.y, point.z - halfExtents.z);
+        gameObject.transform.position = new Vector3(point.x - halfExtents.x, point.y + ContainerBounds.extents.y, point.z - halfExtents.z);
 
     }
 

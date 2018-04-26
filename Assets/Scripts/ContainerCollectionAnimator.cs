@@ -56,8 +56,11 @@ namespace Assets.Scripts {
                     updateAction = null;
 
                 foreach (var cube in containers) {
-                    Vector3 fromPosition = bounds.center;
-                    Vector3 toPosition = cube.GetComponentInChildren<Renderer>().bounds.center;
+                    if(cube.name == "Pallet")
+                        continue;
+
+                    Vector3 fromPosition = bounds.center - new Vector3(0, bounds.extents.y/2, 0);
+                    Vector3 toPosition = cube.GetComponentInChildren<Renderer>().bounds.center + new Vector3(0, .5f, 0);
                     Vector3 direction = toPosition - fromPosition;
 
                     var rayNormal = direction.normalized;
