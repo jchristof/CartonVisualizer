@@ -150,7 +150,6 @@ namespace Assets.VR.Scripts.UI {
                 case DialogType.PackingVisualizer:
                     CreateNewDialog(DialogType.PackingMain);
                     break;
-
             } 
         }
 
@@ -158,8 +157,7 @@ namespace Assets.VR.Scripts.UI {
             var titleText = TitleText(currentUI).Replace("\n", "").Replace("\r", "");
             var message = MessageText(currentUI).Replace("\n", "").Replace("\r", "");
 
-            string ssml = String.Format(@"<speak>{0} <break time=""1s""/> {1}</speak>", titleText, message);
-            string ssmlx = String.Format(@"<?xml version='1.0' encoding='utf-8'?>
+            string ssml = String.Format(@"<?xml version='1.0' encoding='utf-8'?>
                 <speak
                   version=""1.0""
                   xmlns=""http://www.w3.org/2001/10/synthesis""
@@ -167,7 +165,7 @@ namespace Assets.VR.Scripts.UI {
                   {0} <break time=""1s""/> {1}
                 </speak>", titleText, message);
 
-            textToSpeech.SpeakSsml(ssmlx);
+            textToSpeech.SpeakSsml(ssml);
         }
 
         private static string TitleText(GameObject currentUI) {
