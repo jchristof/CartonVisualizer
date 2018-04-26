@@ -83,12 +83,10 @@ namespace Assets.Scripts {
             pallet.name = "Pallet";
             CubeObjects.Add(pallet);
             pallet.transform.parent = parent.transform;
-
-            FitContainerToBounds();
         }
 
         // shrink-wrap the container to the bounding volume to let hololens manipulation rotate it
-        private void FitContainerToBounds() {
+        public void FitContainerToBounds(float withScale) {
             var containerObject = GameObject.Find("Container");
 
             var children = new List<Transform>();
@@ -96,7 +94,7 @@ namespace Assets.Scripts {
                 children.Add(T);
 
             containerObject.transform.DetachChildren();
-            containerObject.transform.localScale = containerBounds.size * 1.25f;
+            containerObject.transform.localScale = containerBounds.size * withScale;
             var newPosition = new Vector3(containerBounds.center.x, containerBounds.extents.y, containerBounds.center.z);
             containerObject.transform.position = newPosition;
 
