@@ -96,7 +96,7 @@ namespace Assets.Scripts {
                 children.Add(T);
 
             containerObject.transform.DetachChildren();
-            containerObject.transform.localScale = containerBounds.size;
+            containerObject.transform.localScale = containerBounds.size * 1.25f;
             var newPosition = new Vector3(containerBounds.center.x, containerBounds.extents.y, containerBounds.center.z);
             containerObject.transform.position = newPosition;
 
