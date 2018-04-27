@@ -148,7 +148,7 @@ namespace Assets.VR.Scripts.UI {
                     break;
                 case DialogType.PackingSequence:
                 case DialogType.PackingVisualizer:
-                    CreateNewDialog(DialogType.PackingMain);
+                    //CreateNewDialog(DialogType.PackingMain);
                     break;
             } 
         }
