@@ -39,6 +39,7 @@ public class ContainerVisualizer : MonoBehaviour {
         }
 
         UIServices.NewButton(buttonPrefab, menu, "Explode", Explode);
+        UIServices.NewButton(buttonPrefab, menu, "Compact", Compact);
         UIServices.NewButton(buttonPrefab, menu, "Exit", Application.Quit);
     }
 
@@ -94,7 +95,7 @@ public class ContainerVisualizer : MonoBehaviour {
         visualContainerCollection = new VisualContainerCollection(cubeIq, gameObject, cubePrefab, materialCollection, originOffset);
         cameraTarget.transform.position = visualContainerCollection.VolumeCenter;
 
-        containerCollectionAnimator = new ContainerCollectionAnimator(gameObject, visualContainerCollection.CubeObjects, .05f, 3f);
+        containerCollectionAnimator = new ContainerCollectionAnimator(gameObject, visualContainerCollection.CubeObjects, .1f, 3f);
     }
 
     void Update() {

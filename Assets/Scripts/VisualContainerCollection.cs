@@ -40,6 +40,7 @@ namespace Assets.Scripts {
             CubeObjects = new List<GameObject>();
 
             BuildVisualVolumes();
+            FitContainerToBounds(1f);
         }
 
         private readonly CubeiqContainer.Cubeiq cubeIqData;
@@ -83,8 +84,6 @@ namespace Assets.Scripts {
             pallet.name = "Pallet";
             CubeObjects.Add(pallet);
             pallet.transform.parent = parent.transform;
-
-            FitContainerToBounds(1f);
         }
 
         // shrink-wrap the container to the bounding volume to let hololens manipulation rotate it
@@ -102,7 +101,6 @@ namespace Assets.Scripts {
 
             foreach (Transform T in children) 
                 T.parent = containerObject.transform;
-            
         }
 
         public Vector3 VolumeCenter { get { return containerBounds.center; } }

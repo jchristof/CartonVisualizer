@@ -50,6 +50,9 @@ namespace Assets.Scripts {
             parentContainer.transform.position = new Vector3(point.x - halfExtents.x, point.y + bounds.extents.y, point.z - halfExtents.z);
         }
 
+        // Animate each volume from the bottom center of the entire collection along
+        // a ray that penetrates the center of that volume. Add an offset from the center to 
+        // account for a game object's position
         public void Explode() {
             bounds = parentContainer.GetComponent<Renderer>().bounds;
             originalPositions = new Dictionary<GameObject, Vector3>( );
@@ -58,21 +61,22 @@ namespace Assets.Scripts {
                     continue;          
 
                 Vector3 fromPosition = bounds.center - new Vector3(0, bounds.extents.y, 0);
-                Vector3 toPosition = cube.GetComponentInChildren<Renderer>().bounds.center;
+                var cubeBounds = cube.GetComponentInChildren<Renderer>().bounds;
+                Vector3 toPosition = cubeBounds.center - cubeBounds.extents;
                 Vector3 direction = toPosition - fromPosition;
 
                 var rayNormal = direction.normalized;
 
                 if(!originalPositions.ContainsKey(cube))
                     originalPositions.Add(cube, cube.transform.position);
+
                 iTween.MoveTo(cube, toPosition + rayNormal * explodeMaxDistance, time);
             }
         }
 
         public void Compact() {
-            foreach (var kvp in originalPositions) {
+            foreach (var kvp in originalPositions) 
                 iTween.MoveTo(kvp.Key, kvp.Value, time);
-            }
 
             originalPositions.Clear();
         }
