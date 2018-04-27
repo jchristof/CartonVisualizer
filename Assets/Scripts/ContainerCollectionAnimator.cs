@@ -38,16 +38,67 @@ namespace Assets.Scripts {
         private float distance;
         private UnityAction updateAction;
 
-        public void StepForward() {
-
-        }
-
         public void PlaceBottomCenterAt(Vector3 point) {
             bounds = parentContainer.GetComponent<Renderer>().bounds;
 
             var halfExtents = bounds.extents/2;
 
             parentContainer.transform.position = new Vector3(point.x - halfExtents.x, point.y + bounds.extents.y, point.z - halfExtents.z);
+        }
+
+        public void ShowBoundingVolume() {
+            parentContainer.GetComponent<MeshRenderer>().enabled = true;
+        }
+
+        public void HideBoundingVolume() {
+            parentContainer.GetComponent<MeshRenderer>().enabled = false;
+        }
+
+        private int showIndex = 0;
+        public void ShowFirst() {
+            showIndex = 0;
+            foreach (var cube in containers) {
+                if (cube.name == "Pallet")
+                    continue;
+
+                cube.transform.GetChild(0).GetComponent<MeshRenderer>().enabled = false;
+            }
+
+            containers[0].transform.GetChild(0).GetComponent<MeshRenderer>().enabled = true;
+        }
+
+        public void ShowNext() {
+            showIndex = Math.Min(containers.Count, ++showIndex);
+            foreach (var cube in containers) {
+                if (cube.name == "Pallet")
+                    continue;
+
+                cube.transform.GetChild(0).GetComponent<MeshRenderer>().enabled = false;
+            }
+
+            containers[showIndex].transform.GetChild(0).GetComponent<MeshRenderer>().enabled = true;
+        }
+
+        public void ShowPrevious() {
+            showIndex = Math.Max(0, --showIndex);
+            foreach (var cube in containers) {
+                if (cube.name == "Pallet")
+                    continue;
+
+                cube.transform.GetChild(0).GetComponent<MeshRenderer>().enabled = false;
+            }
+
+            containers[showIndex].transform.GetChild(0).GetComponent<MeshRenderer>().enabled = true;
+        }
+
+        public void ShowAll() {
+            showIndex = 0;
+            foreach (var cube in containers) {
+                if (cube.name == "Pallet")
+                    continue;
+
+                cube.transform.GetChild(0).GetComponent<MeshRenderer>().enabled = true;
+            }
         }
 
         // Animate each volume from the bottom center of the entire collection along

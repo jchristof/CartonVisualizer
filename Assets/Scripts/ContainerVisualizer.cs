@@ -40,6 +40,10 @@ public class ContainerVisualizer : MonoBehaviour {
 
         UIServices.NewButton(buttonPrefab, menu, "Explode", Explode);
         UIServices.NewButton(buttonPrefab, menu, "Compact", Compact);
+        UIServices.NewButton(buttonPrefab, menu, "Show First", ShowFirst);
+        UIServices.NewButton(buttonPrefab, menu, "Show Next", ShowNext);
+        UIServices.NewButton(buttonPrefab, menu, "Show Previous", ShowPrevious);
+        UIServices.NewButton(buttonPrefab, menu, "Show All", ShowAll);
         UIServices.NewButton(buttonPrefab, menu, "Exit", Application.Quit);
     }
 
@@ -72,7 +76,28 @@ public class ContainerVisualizer : MonoBehaviour {
     }
 
     public void PlaceBottomCenterAt(Vector3 point) {
-        containerCollectionAnimator.PlaceBottomCenterAt(point);
+        if (containerCollectionAnimator != null)
+            containerCollectionAnimator.PlaceBottomCenterAt(point);
+    }
+
+    public void ShowFirst() {
+        if (containerCollectionAnimator != null)
+            containerCollectionAnimator.ShowFirst();
+    }
+
+    public void ShowNext() {
+        if (containerCollectionAnimator != null)
+            containerCollectionAnimator.ShowNext();
+    }
+
+    public void ShowPrevious() {
+        if (containerCollectionAnimator != null)
+            containerCollectionAnimator.ShowPrevious();
+    }
+
+    public void ShowAll() {
+        if (containerCollectionAnimator != null)
+            containerCollectionAnimator.ShowAll();
     }
 
     public Bounds ContainerBounds { get { return visualContainerCollection != null ? visualContainerCollection.ContainerBounds : new Bounds(Vector3.zero, Vector3.one); } }
