@@ -1,19 +1,24 @@
 ﻿
-using UnityEngine;
+
+using Assets.Scripts;
 
 namespace Assets.VR.Scripts.UI {
 
     public class PackingVisualizer : InteractiveMenu {
 
         protected override void ButtonInputDown(string buttonId) {
+            var commands = Parameters as IVisualCommands;
+
+            if (commands == null)
+                return;
 
             if(buttonId.ToLower() == "explode")
-                GameObject.Find("Container").GetComponentInChildren<ContainerVisualizer>().Explode();
+                commands.Explode();
             else if(buttonId.ToLower() == "collapse")
-                GameObject.Find("Container").GetComponentInChildren<ContainerVisualizer>().Compact();
+                commands.Compact();
 
-            if (DialogResult != null)
-                DialogResult("");
+//            if (DialogResult != null)
+//                DialogResult("");
         }
 
         public override DialogType DialogType {

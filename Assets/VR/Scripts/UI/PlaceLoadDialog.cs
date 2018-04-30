@@ -25,7 +25,12 @@ namespace Assets.VR.Scripts.UI {
             if (containerGameObject == null)
                 return;
 
-            containerGameObject.GetComponentInChildren<ContainerVisualizer>().LoadOne();
+            var loadName = (Parameters as string).Trim().ToLower();
+
+            if (loadName == "load 1")
+                containerGameObject.GetComponentInChildren<ContainerVisualizer>().LoadOne();
+            else if(loadName == "load 2")
+                containerGameObject.GetComponentInChildren<ContainerVisualizer>().LoadTwo();
 
             if (SpatialMappingManager.Instance == null)
                 return;

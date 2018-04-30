@@ -39,9 +39,17 @@ namespace Assets.VR.Scripts.UI {
             base.InputDown(obj, eventData);
 
             if (!eventData.used) {
-       
-                ButtonInputDown(obj.GetComponent<CompoundButtonText>().Text);
-                eventData.Use();
+
+                var buttonText = obj.GetComponent<CompoundButtonText>().Text;
+                if (buttonText == "Back") {
+                    if (GoBack != null)
+                        GoBack();
+                }
+                else {
+                    ButtonInputDown(buttonText);
+                    eventData.Use();
+
+                }
             }
         }
 
@@ -51,9 +59,12 @@ namespace Assets.VR.Scripts.UI {
 
         // Call to return some value to the menu manger and close the dialog
         public Action<object> DialogResult { get; set; }
-
+        public Action GoBack { get; set; }
         // Provide this menu's type
         public abstract DialogType DialogType { get; }
+
+        
+
     }
 
 }

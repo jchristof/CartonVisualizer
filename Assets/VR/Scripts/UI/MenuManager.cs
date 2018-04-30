@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using HoloToolkit.Unity;
 using HoloToolkit.Unity.InputModule;
-using HoloToolkit.Unity.SpatialMapping;
 using UnityEngine;
 using UnityEngine.Windows.Speech;
 
@@ -38,48 +37,8 @@ namespace Assets.VR.Scripts.UI {
             audioSource = gameObject.GetComponentInChildren<AudioSource>();
 
             CreateNewDialog(DialogType.Welcome);
-
-            SurfaceMeshesToPlanes.Instance.MakePlanesComplete += InstanceOnMakePlanesComplete;
-            InputManager.Instance.PushFallbackInputHandler(gameObject);
-        }
-
-        private int minimumFloors;
-
-        private void InstanceOnMakePlanesComplete(object source, EventArgs args) {
-            List<GameObject> floors = new List<GameObject>();
-            floors = SurfaceMeshesToPlanes.Instance.GetActivePlanes(PlaneTypes.Floor);
-
-            // Check to see if we have enough floors (minimumFloors) to start processing.
-            if (floors.Count >= minimumFloors) {
-                // Reduce our triangle count by removing any triangles
-                // from SpatialMapping meshes that intersect with active planes.
-                RemoveVertices(SurfaceMeshesToPlanes.Instance.ActivePlanes);
-
-                // After scanning is over, switch to the secondary (occlusion) material.
-               // SpatialMappingManager.Instance.SetSurfaceMaterial(secondaryMaterial);
-            }
-            else {
-                // Re-enter scanning mode so the user can find more surfaces before processing.
-                SpatialMappingManager.Instance.StartObserver();
-
-                // Re-process spatial data after scanning completes.
-                //meshesProcessed = false;
-            }
-        }
-
-        private void CreatePlanes() {
-            // Generate planes based on the spatial map.
-            SurfaceMeshesToPlanes surfaceToPlanes = SurfaceMeshesToPlanes.Instance;
-            if (surfaceToPlanes != null && surfaceToPlanes.enabled) {
-                surfaceToPlanes.MakePlanes();
-            }
-        }
-
-        private void RemoveVertices(IEnumerable<GameObject> boundingObjects) {
-            RemoveSurfaceVertices removeVerts = RemoveSurfaceVertices.Instance;
-            if (removeVerts != null && removeVerts.enabled) {
-                removeVerts.RemoveSurfaceVerticesWithinBounds(boundingObjects);
-            }
+   
+            //InputManager.Instance.PushFallbackInputHandler(gameObject);
         }
 
         private void KeywordRecognizerOnOnPhraseRecognized(PhraseRecognizedEventArgs args) {
@@ -106,13 +65,20 @@ namespace Assets.VR.Scripts.UI {
             }
         }
 
-        private void CreateNewDialog(DialogType dialogType) {
+        private void CreateNewDialog(DialogType dialogType, object parameters = null) {
 
             var dialog = dialogs.FirstOrDefault(x => x.type == dialogType);
 
-            dialogStack.Push(dialogType);
+            if(currentUI != null)
+                dialogStack.Push(currentUI.GetComponentInChildren<IDialog>().DialogType);
+
             currentUI = Instantiate(dialog.dialog, gameObject.transform);
-            currentUI.GetComponentInChildren<IDialog>().DialogResult = Result;
+
+            var dialogScript = currentUI.GetComponentInChildren<IDialog>();
+
+            dialogScript.DialogResult = Result;
+            dialogScript.Parameters = parameters;
+            dialogScript.GoBack = GoBack;
 
             SpeakTheMenuText(currentUI);
         }
@@ -127,9 +93,7 @@ namespace Assets.VR.Scripts.UI {
             var dialogType = dialogStack.Pop();
             CreateNewDialog(dialogType);
         }
-
-        private string selectedLoad;
-
+        
         public void Result(object value) {
             audioSource.PlayOneShot(buttonClick);
     
@@ -144,7 +108,6 @@ namespace Assets.VR.Scripts.UI {
 
                 case DialogType.FinalizeScan:
                     CreateNewDialog(DialogType.SelectLoad);
-                    CreatePlanes();
                     break;
 
                 case DialogType.PlaceLoad:
@@ -152,20 +115,17 @@ namespace Assets.VR.Scripts.UI {
                     break;
 
                 case DialogType.PackingMain:
+                    var container = GameObject.Find("Container").GetComponentInChildren<ContainerVisualizer>();
+
                     if (value as string == "Load Sequence") 
-                        CreateNewDialog(DialogType.PackingSequence);
-                    
+                        CreateNewDialog(DialogType.PackingSequence, container.VisualCommands);
+
                     else if (value as string == "Visualization") 
-                        CreateNewDialog(DialogType.PackingVisualizer);
-                    
+                        CreateNewDialog(DialogType.PackingVisualizer, container.VisualCommands);
+
                     break;
                 case DialogType.SelectLoad:
-                    CreateNewDialog(DialogType.PlaceLoad);
-                    selectedLoad = value.ToString();
-//                    if (value == "load 1")
-//                        GameObject.Find("Container").GetComponentInChildren<ContainerVisualizer>().LoadOne();
-//                    else if (value == "load 2")
-//                        GameObject.Find("Container").GetComponentInChildren<ContainerVisualizer>().LoadTwo();
+                    CreateNewDialog(DialogType.PlaceLoad, value.ToString());
                     break;
 
                 case DialogType.PackingSequence:
@@ -233,7 +193,7 @@ namespace Assets.VR.Scripts.UI {
         }
 
         void OnDestroy() {
-            InputManager.Instance.PopFallbackInputHandler();
+            //InputManager.Instance.PopFallbackInputHandler();
         }
     }
 

@@ -10,7 +10,7 @@ namespace Assets.VR.Scripts.UI {
         }
 
         public override DialogType DialogType {
-            get { return DialogType.PackingVisualizer; }
+            get { return DialogType.SelectLoad; }
         }
     }
 }

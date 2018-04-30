@@ -17,6 +17,11 @@ public class ContainerVisualizer : MonoBehaviour {
     private CubeiqContainer.Cubeiq cubeIq;
     private VisualContainerCollection visualContainerCollection;
     private ContainerCollectionAnimator containerCollectionAnimator;
+
+    public IVisualCommands VisualCommands {
+        get { return containerCollectionAnimator; }
+    }
+
     private FileInfo[] files;
 
     void Start() {

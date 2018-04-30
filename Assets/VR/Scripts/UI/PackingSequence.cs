@@ -1,19 +1,23 @@
 ﻿
+using Assets.Scripts;
 using Assets.VR.Scripts.UI;
-using UnityEngine;
 
 public class PackingSequence : InteractiveMenu {
 
     protected override void ButtonInputDown(string buttonId) {
+        var commands = Parameters as IVisualCommands;
+
+        if (commands == null)
+            return;
 
         if (buttonId.ToLower() == "first")
-            GameObject.Find("Container").GetComponentInChildren<ContainerVisualizer>().ShowFirst();
+            commands.ShowFirst();
         else if (buttonId.ToLower() == "next")
-            GameObject.Find("Container").GetComponentInChildren<ContainerVisualizer>().ShowNext();
+            commands.ShowNext();
         else if (buttonId.ToLower() == "previous")
-            GameObject.Find("Container").GetComponentInChildren<ContainerVisualizer>().ShowPrevious();
+            commands.ShowPrevious();
         else if (buttonId.ToLower() == "all")
-            GameObject.Find("Container").GetComponentInChildren<ContainerVisualizer>().ShowAll();
+            commands.ShowAll();
 
 //        if (DialogResult != null)
 //            DialogResult("");

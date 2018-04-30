@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Events;
 
 namespace Assets.Scripts {
-    public class ContainerCollectionAnimator {
+    public class ContainerCollectionAnimator : IVisualCommands {
 
         /// <summary>
         /// Take a set of container objects to animate in their original positions
