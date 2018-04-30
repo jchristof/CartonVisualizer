@@ -47,6 +47,8 @@ namespace Assets.VR.Scripts.UI {
 
         protected virtual void ButtonInputDown(string buttonId) { }
 
+        public object Parameters { get; set; }
+
         // Call to return some value to the menu manger and close the dialog
         public Action<object> DialogResult { get; set; }
 

@@ -17,6 +17,8 @@ namespace Assets.VR.Scripts.UI {
             if (eventData.used)
                 return;
 
+            eventData.Use();
+
             InputManager.Instance.PopFallbackInputHandler();
 
             var containerGameObject = GameObject.Find("Container");

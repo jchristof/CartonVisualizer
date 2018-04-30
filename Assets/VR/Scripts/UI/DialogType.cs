@@ -8,6 +8,5 @@ public enum DialogType {
     PackingVisualizer,
     PackingOperationsToolbar,
     PackingSequence,
-
-
+    SelectLoad
 }

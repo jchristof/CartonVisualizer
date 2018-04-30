@@ -2,15 +2,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Xml.Linq;
 using HoloToolkit.Unity;
+using HoloToolkit.Unity.InputModule;
 using HoloToolkit.Unity.SpatialMapping;
 using UnityEngine;
 using UnityEngine.Windows.Speech;
 
 namespace Assets.VR.Scripts.UI {
 
-    public class MenuManager : MonoBehaviour {
+    public class MenuManager : MonoBehaviour, IInputClickHandler {
 
         [Serializable]
         public struct DialogMenus {
@@ -40,6 +40,7 @@ namespace Assets.VR.Scripts.UI {
             CreateNewDialog(DialogType.Welcome);
 
             SurfaceMeshesToPlanes.Instance.MakePlanesComplete += InstanceOnMakePlanesComplete;
+            InputManager.Instance.PushFallbackInputHandler(gameObject);
         }
 
         private int minimumFloors;
@@ -116,11 +117,23 @@ namespace Assets.VR.Scripts.UI {
             SpeakTheMenuText(currentUI);
         }
 
+        private void GoBack() {
+            if (dialogStack.Count == 0)
+                return;
+
+            audioSource.PlayOneShot(buttonClick);
+            Destroy(currentUI);
+
+            var dialogType = dialogStack.Pop();
+            CreateNewDialog(dialogType);
+        }
+
+        private string selectedLoad;
+
         public void Result(object value) {
             audioSource.PlayOneShot(buttonClick);
     
             var dialog = currentUI.GetComponentInChildren<IDialog>();
-            dialogStack.Push(dialog.DialogType);
 
             Destroy(currentUI);
 
@@ -130,7 +143,7 @@ namespace Assets.VR.Scripts.UI {
                     break;
 
                 case DialogType.FinalizeScan:
-                    CreateNewDialog(DialogType.PlaceLoad);
+                    CreateNewDialog(DialogType.SelectLoad);
                     CreatePlanes();
                     break;
 
@@ -146,6 +159,15 @@ namespace Assets.VR.Scripts.UI {
                         CreateNewDialog(DialogType.PackingVisualizer);
                     
                     break;
+                case DialogType.SelectLoad:
+                    CreateNewDialog(DialogType.PlaceLoad);
+                    selectedLoad = value.ToString();
+//                    if (value == "load 1")
+//                        GameObject.Find("Container").GetComponentInChildren<ContainerVisualizer>().LoadOne();
+//                    else if (value == "load 2")
+//                        GameObject.Find("Container").GetComponentInChildren<ContainerVisualizer>().LoadTwo();
+                    break;
+
                 case DialogType.PackingSequence:
                 case DialogType.PackingVisualizer:
                     //CreateNewDialog(DialogType.PackingMain);
@@ -200,6 +222,18 @@ namespace Assets.VR.Scripts.UI {
                 return "";
 
             return textMesh.text;
+        }
+
+        public void OnInputClicked(InputClickedEventData eventData) {
+            if (eventData.used)
+                return;
+
+            eventData.Use();
+            GoBack();
+        }
+
+        void OnDestroy() {
+            InputManager.Instance.PopFallbackInputHandler();
         }
     }
 
