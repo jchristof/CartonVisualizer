@@ -123,6 +123,11 @@ namespace Assets.VR.Scripts.UI {
                     else if (value as string == "Visualization") 
                         CreateNewDialog(DialogType.PackingVisualizer, container.VisualCommands);
 
+                    else if (value as string == "Adjustment") {
+                        CreateNewDialog(DialogType.PackingAdjustment, container.VisualCommands);
+                        currentUI.GetComponent<IDialog>().Initialize(container.VisualCommands);
+                    }
+
                     break;
                 case DialogType.SelectLoad:
                     CreateNewDialog(DialogType.PlaceLoad, value.ToString());
@@ -130,6 +135,7 @@ namespace Assets.VR.Scripts.UI {
 
                 case DialogType.PackingSequence:
                 case DialogType.PackingVisualizer:
+                case DialogType.PackingAdjustment:
                     //CreateNewDialog(DialogType.PackingMain);
                     break;
             } 

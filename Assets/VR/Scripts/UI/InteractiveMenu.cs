@@ -10,6 +10,8 @@ namespace Assets.VR.Scripts.UI {
 
     public abstract class InteractiveMenu : InteractionReceiver, IDialog {
 
+        public virtual void Initialize(object parameters) {}
+
         private KeywordRecognizer keywordRecognizer;
 
         // Register this menu's compound button objects
@@ -41,16 +43,19 @@ namespace Assets.VR.Scripts.UI {
             if (!eventData.used) {
 
                 var buttonText = obj.GetComponent<CompoundButtonText>().Text;
-                if (buttonText == "Back") {
-                    if (GoBack != null)
-                        GoBack();
+                if (buttonText.ToLower() == "back") {
+                    OnGoBack();
                 }
                 else {
                     ButtonInputDown(buttonText);
                     eventData.Use();
-
                 }
             }
+        }
+
+        protected virtual void OnGoBack() {
+            if (GoBack != null)
+                GoBack();
         }
 
         protected virtual void ButtonInputDown(string buttonId) { }
@@ -62,9 +67,6 @@ namespace Assets.VR.Scripts.UI {
         public Action GoBack { get; set; }
         // Provide this menu's type
         public abstract DialogType DialogType { get; }
-
-        
-
     }
 
 }

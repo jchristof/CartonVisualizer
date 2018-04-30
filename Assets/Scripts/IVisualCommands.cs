@@ -13,5 +13,8 @@ namespace Assets.Scripts {
         void Explode();
         void Compact();
 
+        void RotationOn();
+        void RotationOff();
+
     }
 }

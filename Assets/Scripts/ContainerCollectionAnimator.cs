@@ -46,6 +46,14 @@ namespace Assets.Scripts {
             parentContainer.transform.position = new Vector3(point.x - halfExtents.x, point.y + bounds.extents.y, point.z - halfExtents.z);
         }
 
+        public void RotationOn() {
+            ShowBoundingVolume();
+        }
+
+        public void RotationOff() {
+            HideBoundingVolume();
+        }
+
         public void ShowBoundingVolume() {
             parentContainer.GetComponent<MeshRenderer>().enabled = true;
         }
