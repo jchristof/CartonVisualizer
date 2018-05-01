@@ -37,7 +37,7 @@ namespace Assets.VR.Scripts.UI {
 
             RaycastHit hitInfo;
             if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hitInfo, 30.0f, SpatialMappingManager.Instance.LayerMask))
-                containerGameObject.GetComponentInChildren<ContainerVisualizer>().PlaceBottomCenterAt(hitInfo.point);
+                containerGameObject.GetComponentInChildren<ContainerVisualizer>().VisualCommands.PlaceBottomCenterAt(hitInfo.point);
 
             if (DialogResult != null)
                 DialogResult("");

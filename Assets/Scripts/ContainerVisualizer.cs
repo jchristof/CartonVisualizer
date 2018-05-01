@@ -16,11 +16,8 @@ public class ContainerVisualizer : MonoBehaviour {
     // Data and visualization elements
     private CubeiqContainer.Cubeiq cubeIq;
     private VisualContainerCollection visualContainerCollection;
-    private ContainerCollectionAnimator containerCollectionAnimator;
 
-    public IVisualCommands VisualCommands {
-        get { return containerCollectionAnimator; }
-    }
+    public ContainerCollectionAnimator VisualCommands { get; private set; }
 
     private FileInfo[] files;
 
@@ -43,12 +40,12 @@ public class ContainerVisualizer : MonoBehaviour {
             });
         }
 
-        UIServices.NewButton(buttonPrefab, menu, "Explode", Explode);
-        UIServices.NewButton(buttonPrefab, menu, "Compact", Compact);
-        UIServices.NewButton(buttonPrefab, menu, "Show First", ShowFirst);
-        UIServices.NewButton(buttonPrefab, menu, "Show Next", ShowNext);
-        UIServices.NewButton(buttonPrefab, menu, "Show Previous", ShowPrevious);
-        UIServices.NewButton(buttonPrefab, menu, "Show All", ShowAll);
+        UIServices.NewButton(buttonPrefab, menu, "Explode", () => VisualCommands?.Explode());
+        UIServices.NewButton(buttonPrefab, menu, "Compact", () => VisualCommands?.Compact());
+        UIServices.NewButton(buttonPrefab, menu, "Show First", () => VisualCommands?.ShowFirst());
+        UIServices.NewButton(buttonPrefab, menu, "Show Next", () => VisualCommands?.ShowNext());
+        UIServices.NewButton(buttonPrefab, menu, "Show Previous", () => VisualCommands?.ShowPrevious());
+        UIServices.NewButton(buttonPrefab, menu, "Show All", () => VisualCommands?.ShowAll());
         UIServices.NewButton(buttonPrefab, menu, "Exit", Application.Quit);
     }
 
@@ -68,41 +65,6 @@ public class ContainerVisualizer : MonoBehaviour {
             return;
 
         Visualize(cubeIq);
-    }
-
-    public void Explode() {
-        if(containerCollectionAnimator != null)
-            containerCollectionAnimator.Explode();
-    }
-
-    public void Compact() {
-        if(containerCollectionAnimator != null)
-            containerCollectionAnimator.Compact();
-    }
-
-    public void PlaceBottomCenterAt(Vector3 point) {
-        if (containerCollectionAnimator != null)
-            containerCollectionAnimator.PlaceBottomCenterAt(point);
-    }
-
-    public void ShowFirst() {
-        if (containerCollectionAnimator != null)
-            containerCollectionAnimator.ShowFirst();
-    }
-
-    public void ShowNext() {
-        if (containerCollectionAnimator != null)
-            containerCollectionAnimator.ShowNext();
-    }
-
-    public void ShowPrevious() {
-        if (containerCollectionAnimator != null)
-            containerCollectionAnimator.ShowPrevious();
-    }
-
-    public void ShowAll() {
-        if (containerCollectionAnimator != null)
-            containerCollectionAnimator.ShowAll();
     }
 
     public Bounds ContainerBounds { get { return visualContainerCollection != null ? visualContainerCollection.ContainerBounds : new Bounds(Vector3.zero, Vector3.one); } }
@@ -125,11 +87,6 @@ public class ContainerVisualizer : MonoBehaviour {
         visualContainerCollection = new VisualContainerCollection(cubeIq, gameObject, cubePrefab, materialCollection, originOffset);
         cameraTarget.transform.position = visualContainerCollection.VolumeCenter;
 
-        containerCollectionAnimator = new ContainerCollectionAnimator(gameObject, visualContainerCollection.CubeObjects, .1f, 3f);
-    }
-
-    void Update() {
-        if(containerCollectionAnimator != null)
-            containerCollectionAnimator.Update();
+        VisualCommands = new ContainerCollectionAnimator(gameObject, visualContainerCollection.CubeObjects, .1f, 3f);
     }
 }

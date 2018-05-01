@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace Assets.Scripts {
     public class ContainerCollectionAnimator : IVisualCommands {
@@ -36,7 +35,6 @@ namespace Assets.Scripts {
         private Bounds bounds;
 
         private float distance;
-        private UnityAction updateAction;
 
         public void PlaceBottomCenterAt(Vector3 point) {
             bounds = parentContainer.GetComponent<Renderer>().bounds;
@@ -138,11 +136,6 @@ namespace Assets.Scripts {
                 iTween.MoveTo(kvp.Key, kvp.Value, time);
 
             originalPositions.Clear();
-        }
-
-        public void Update() {
-            if (updateAction != null)
-                updateAction();
         }
 
         void DrawLine(Vector3 start, Vector3 end, Color color, float duration = 0.2f) {

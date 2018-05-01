@@ -26,11 +26,11 @@ namespace Assets.Scripts.Input {
             });
 
             keywords.Add("explode", () => {
-                GameObject.Find("Container").GetComponentInChildren<ContainerVisualizer>().Explode();
+                GameObject.Find("Container").GetComponentInChildren<ContainerVisualizer>().VisualCommands.Explode();
             });
 
             keywords.Add("compact", () => {
-                GameObject.Find("Container").GetComponentInChildren<ContainerVisualizer>().Compact();
+                GameObject.Find("Container").GetComponentInChildren<ContainerVisualizer>().VisualCommands.Compact();
             });
 
             keywords.Add("place container", ()=>{
